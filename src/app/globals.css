@@ -1,26 +1,138 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 @import "tailwindcss";
 
+@theme {
+  --color-green: #057203;
+  --color-light-green: #17750d;
+  --color-green-100: #f0fff0;
+  --color-off-black: #030303;
+  --color-black-600: #333636;
+  --color-black-700: #0a0a0a;
+  --color-black-800: #383838;
+  --color-black-900: #1e1e1e;
+  --color-dark-black: #181725;
+  --color-red: #fc3030;
+  --color-orange: #ec6d1d;
+  --color-off-white: #f3f3f3;
+  --leading-100: 100%;
+  --text-13: 13px;
+}
+/* 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-light-green: #17750d;
+  --color-off-black: #030303;
+  --color-dark-black: #181725;
+   --color-red: #FC3030;
+    --color-off-white: #F3F3F3;
+   --leading-100:100%;
+   --text-13:13px;
+} */
+
+@font-face {
+  font-family: "Gilroy-Bold";
+  src: url("../fonts/Gilroy-Bold.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+@font-face {
+  font-family: "Gilroy-SemiBold";
+  src: url("../fonts/Gilroy-SemiBold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Gilroy-Medium";
+  src: url("../fonts/Gilroy-Medium.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@font-face {
+  font-family: "Gilroy-Regular";
+  src: url("../fonts/Gilroy-Regular.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+
+.font-gilroy-bold {
+  font-family: "Gilroy-Bold", sans-serif;
+  font-weight: normal;
+}
+
+.font-gilroy-semibold {
+  font-family: "Gilroy-SemiBold", sans-serif;
+  font-weight: bold;
+}
+
+.font-gilroy-medium {
+  font-family: "Gilroy-Medium", sans-serif;
+  font-weight: normal;
+}
+
+.font-gilroy-regular {
+  font-family: "Gilroy-Regular", sans-serif;
+  font-weight: bold;
+}
+.font-inter {
+  font-family: "Inter", sans-serif;
+}
+
+.swiper-slide-active div {
+  border-color: #17750d80 !important;
+  transition: all 0.3s linear !important;
+  border-radius: 16px !important;
+}
+
+button span.ml-4 {
+  display: none;
+}
+
+/* @keyframes slide {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  50% {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0%);
+    opacity: 1;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.animate-slide {
+  animation: slide 0.5s ease-in-out;
+} */
+
+@keyframes slide-in {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-out {
+  0% {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+.animate-slide-in {
+  animation: slide-in 0.5s ease-in-out forwards;
+}
+
+.animate-slide-out {
+  animation: slide-out 0.5s ease-in-out forwards;
 }
