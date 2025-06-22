@@ -480,3 +480,12 @@ export const DEALS_PRODUCT_SLIDER_LIST = [
     countdownTarget: "2025-06-21T16:59:59",
   },
 ];
+
+export const PRELOADER_IMAGES_LIST = [
+
+    "/assets/images/png/strawberries.png",
+    "/assets/images/png/cauliflower.png",
+    "/assets/images/png/almond_milk.png",
+    "/assets/images/png/apple.png",
+    "/assets/images/png/lemon.png",
+]
