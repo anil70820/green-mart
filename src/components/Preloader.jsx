@@ -40,7 +40,7 @@ const Preloader = ({ isLoading }) => {
         />
       </div>
 
-      <div className="text-xl font-semibold text-green-700 flex gap-1 items-end font-inter">
+      <div className="sm:text-xl text-lg font-semibold text-green-700 flex gap-1 items-end font-inter">
         <span>Loading your Green Mart</span>
         <span className="flex gap-1">
           <span className="animate-bounce [animation-delay:0ms]">.</span>
