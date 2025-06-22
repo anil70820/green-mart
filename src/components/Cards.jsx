@@ -32,9 +32,9 @@ const Cards = () => {
                 <p className="font-inter font-normal md:text-2xl sm:text-xl text-lg leading-[100%] text-white mb-2">
                   {card.category}
                 </p>
-                <h3 className="font-inter font-semibold lg:text-4xl md:text-2xl text-xl leading-[140%] text-white mb-4">
+                <p className="font-inter font-semibold lg:text-4xl md:text-2xl text-xl leading-[140%] text-white mb-4">
                   {card.title}
-                </h3>
+                </p>
                 <Cta className="shadow-none hover:bg-transparent !text-black hover:!text-white sm:max-w-[152px] max-w-[120px] max-sm:!text-base bg-white border border-transparent hover:border-white max-sm:h-10">
                   Shop Now
                 </Cta>

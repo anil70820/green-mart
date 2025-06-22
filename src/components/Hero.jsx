@@ -88,7 +88,7 @@ const Hero = () => {
               alt="hero_image"
               width={400}
               height={400}
-              className="max-w-full h-auto max-sm:w-[300px]"
+              className="max-w-full h-auto max-sm:w-[300px] min-h-[280px]"
               sizes="100vw"
             />
           </div>

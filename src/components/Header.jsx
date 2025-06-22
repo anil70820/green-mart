@@ -61,6 +61,7 @@ const Header = () => {
             Order Delivery
           </Cta>
           <button
+          aria-label="menu"
             onClick={toggleMenu}
             className="flex flex-col items-center justify-center w-10 h-10 focus:outline-none md:hidden relative z-50"
           >

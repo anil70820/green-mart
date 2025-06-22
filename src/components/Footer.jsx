@@ -33,6 +33,7 @@ const Footer = () => {
                     key={index}
                     target="_blank"
                     rel="noopener noreferrer"
+                    aria-label={link.icon}
                     className="group w-8 h-8 rounded-full flex items-center justify-center border border-orange hover:border-green duration-300 transition-all"
                   >
                     {
