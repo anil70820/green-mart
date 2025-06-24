@@ -55,7 +55,8 @@ const Deals = () => {
             >
               <Icons
                 icon="sliderLeftArrow"
-                className="group-hover:stroke-green stroke-black duration-300 transition-all" arrowSize="!w-6 !h-12"
+                className="group-hover:stroke-green group-active:stroke-green group-focus:stroke-green stroke-black duration-300 transition-all"
+                arrowSize="!w-6 !h-12"
               />
             </span>
             <span
@@ -64,7 +65,8 @@ const Deals = () => {
             >
               <Icons
                 icon="sliderRightArrow"
-                className="group-hover:stroke-green stroke-black duration-300 transition-all" arrowSize="!w-6 !h-12"
+                className="group-hover:stroke-green group-active:stroke-green group-focus:stroke-green stroke-black duration-300 transition-all"
+                arrowSize="!w-6 !h-12"
               />
             </span>
           </div>

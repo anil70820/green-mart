@@ -6,7 +6,13 @@ import { PRELOADER_IMAGES_LIST } from "@/utils/helper";
 const Preloader = ({ isLoading }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [hide, setHide] = useState(false);
-
+  useEffect(() => {
+    if (isLoading) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+  }, [isLoading]);
   // Image rotation
   useEffect(() => {
     const interval = setInterval(() => {

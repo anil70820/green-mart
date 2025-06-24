@@ -12,15 +12,15 @@ const Footer = () => {
       <div className="container xl:max-w-[1140px] mx-auto px-5 xl:px-0">
         <div className="flex lg:flex-row flex-col md:gap-8 gap-6 justify-between lg:mb-12 md:mb-10 mb-8">
           <div className="lg:max-w-4/12 w-full max-w-[400px]">
-           <Link href="/">
-            <Image
-              className="md:w-[274px] w-[200px] h-auto"
-              src="/assets/images/svg/logo.svg"
-              alt="GreenMart Logo"
-              width={274}
-              height={61}
-            />
-           </Link>
+            <Link href="/">
+              <Image
+                className="md:w-[274px] w-[200px] h-auto"
+                src="/assets/images/svg/logo.svg"
+                alt="GreenMart Logo"
+                width={274}
+                height={61}
+              />
+            </Link>
             <p className="font-inter font-normal lg:text-base text-sm leading-[150%] text-black/70 lg:max-w-[300px] mt-4 lg:mb-8 md:mb-6 mb-4">
               GreenMart is your trusted online grocery store, offering fresh and
               high-quality products at the best prices.
@@ -34,12 +34,12 @@ const Footer = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={link.icon}
-                    className="group w-8 h-8 rounded-full flex items-center justify-center border border-orange hover:border-green duration-300 transition-all"
+                    className="group w-8 h-8 rounded-full flex items-center justify-center border border-orange hover:border-green active:border-green focus:border-green duration-300 transition-all"
                   >
                     {
                       <Icons
                         icon={link.icon}
-                        className="group-hover:fill-green transition-all duration-300"
+                        className="group-hover:fill-green group-active:fill-green group-focus:fill-green transition-all duration-300"
                       />
                     }
                   </Link>
@@ -66,7 +66,7 @@ const Footer = () => {
                       )}
                       <Link
                         href={link.href}
-                        className="relative after:absolute after:w-full after:bg-green after:h-px after:scale-x-0 after:bottom-0 after:left-0 hover:after:scale-100 after:transition-all after:duration-300 hover:text-green duration-300 transition-all inline-block"
+                        className="relative after:absolute after:w-full after:bg-green after:h-px after:scale-x-0 after:bottom-0 after:left-0 hover:after:scale-100 active:after:scale-100 focus:after:scale-100 after:transition-all after:duration-300 hover:text-green active:text-green focus:text-green duration-300 transition-all inline-block"
                         target={
                           link.href.startsWith("http") ? "_blank" : "_self"
                         }

@@ -18,7 +18,7 @@ const WhyUs = () => {
             return (
               <div
                 key={index}
-                className="flex flex-col flex-1 basis-0 min-w-[250px] items-stretch border border-black/10 shadow-[4px_4px_14px_0px_#3F8A3114] rounded-2xl p-6 max-w-[364px] w-full hover:border-light-green/50 hover:shadow-[4px_4px_16px_0px_#3F8A3114] transition-all duration-300"
+                className="flex flex-col flex-1 basis-0 min-w-[250px] items-stretch border border-black/10 shadow-[4px_4px_14px_0px_#3F8A3114] rounded-2xl p-6 max-w-[364px] w-full hover:border-light-green/50 hover:shadow-[4px_4px_16px_0px_#3F8A3114] active:border-light-green/50 active:shadow-[4px_4px_16px_0px_#3F8A3114] focus:border-light-green/50 focus:shadow-[4px_4px_16px_0px_#3F8A3114] transition-all duration-300"
               >
                 <div className="w-[110px] h-[110px] bg-bermuda rounded-md flex items-center justify-center mb-4 mx-auto">
                   <Image

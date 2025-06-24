@@ -15,7 +15,9 @@ const AboutUs = () => {
           fruits and vegetables to eco-friendly packaging, we are committed to a
           greener future.
         </p>
-        <Cta className="max-w-[136px] md:mt-10 mt-8 ms-0 bg-orange shadow-none hover:text-orange border border-transparent hover:border-orange max-sm:mx-auto">Shop Now</Cta>
+        <Cta className="max-w-[136px] md:mt-10 mt-8 ms-0 bg-orange shadow-none hover:text-orange active:text-orange focus:text-orange border border-transparent hover:border-orange active:border-orange focus:border-orange max-sm:mx-auto">
+          Shop Now
+        </Cta>
       </div>
     </div>
   );

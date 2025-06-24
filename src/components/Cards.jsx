@@ -26,7 +26,9 @@ const Cards = () => {
                 width={250}
                 height={250}
                 sizes="100vw"
-                className={`object-contain absolute right-0 bottom-0 lg:size-[250px] md:size-[180px] size-[150px] -z-10 pointer-events-none ${index=== 1 ? "!-bottom-4": index=== 0 ? "!-right-4":""}`}
+                className={`object-contain absolute right-0 bottom-0 lg:size-[250px] md:size-[180px] size-[150px] -z-10 pointer-events-none ${
+                  index === 1 ? "!-bottom-4" : index === 0 ? "!-right-4" : ""
+                }`}
               />
               <div className="max-w-[300px] w-full">
                 <p className="font-inter font-normal md:text-2xl sm:text-xl text-lg leading-[100%] text-white mb-2">
@@ -35,7 +37,7 @@ const Cards = () => {
                 <p className="font-inter font-semibold lg:text-4xl md:text-2xl text-xl leading-[140%] text-white mb-4">
                   {card.title}
                 </p>
-                <Cta className="shadow-none hover:bg-transparent !text-black hover:!text-white sm:max-w-[152px] max-w-[120px] max-sm:!text-base bg-white border border-transparent hover:border-white max-sm:h-10">
+                <Cta className="shadow-none hover:bg-transparent active:bg-transparent focus:bg-transparent !text-black hover:!text-white active:!text-white focus:!text-white sm:max-w-[152px] max-w-[120px] max-sm:!text-base bg-white border border-transparent hover:border-white active:border-white focus:border-white max-sm:h-10">
                   Shop Now
                 </Cta>
               </div>
