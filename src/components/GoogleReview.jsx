@@ -62,7 +62,7 @@ const GoogleReview = () => {
             {GOOGLE_REVIEWS_LIST.map((review, index) => {
               return (
                 <SwiperSlide key={index} className="!h-full">
-                  <div className="bg-white !h-full w-full shadow-[4px_4px_14px_0px_#3F8A3114] hover:shadow-[4px_4px_16px_0px_#3F8A3114] rounded-3xl md:p-7 p-5 flex flex-col items-center justify-between relative transition-all duration-300 border border-transparent hover:border-light-green/50">
+                  <div className="bg-white !h-full w-full shadow-[4px_4px_14px_0px_#3F8A3114] hover:shadow-[4px_4px_16px_0px_#3F8A3114] active:shadow-[4px_4px_16px_0px_#3F8A3114] focus:shadow-[4px_4px_16px_0px_#3F8A3114] rounded-3xl md:p-7 p-5 flex flex-col items-center justify-between relative transition-all duration-300 border border-transparent hover:border-light-green/50 active:border-light-green/50 focus:border-light-green/50">
                     <Image
                       className="absolute lg:right-4 lg:top-4 top-3 right-3 md:size-[50px] size-10"
                       src="/assets/images/svg/quotes.svg"
@@ -110,7 +110,7 @@ const GoogleReview = () => {
             >
               <Icons
                 icon="sliderLeftArrow"
-                className="group-hover:stroke-off-white duration-300 transition-all"
+                className="group-hover:stroke-off-white group-active:stroke-off-white group-focus:stroke-off-white duration-300 transition-all"
               />
             </div>
             <div
@@ -119,7 +119,7 @@ const GoogleReview = () => {
             >
               <Icons
                 icon="sliderRightArrow"
-                className="group-hover:stroke-off-white duration-300 transition-all"
+                className="group-hover:stroke-off-white group-active:stroke-off-white group-focus:stroke-off-white duration-300 transition-all"
               />
             </div>
           </div>

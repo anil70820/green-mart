@@ -78,7 +78,7 @@
   font-family: "Inter", sans-serif;
 }
 
-.swiper-slide-focus div {
+.swiper-slide-active div {
   border-color: #17750d80 !important;
   transition: all 0.3s linear !important;
   border-radius: 16px !important;

@@ -44,7 +44,7 @@ const OurCategories = () => {
             return (
               <div
                 key={index}
-                className={`${category.theme} border-[1.53px] lg:h-[290px] w-full rounded-2xl p-5 flex items-center flex-col justify-between hover:scale-95 transition-all duration-300 cursor-pointer`}
+                className={`${category.theme} border-[1.53px] lg:h-[290px] w-full rounded-2xl p-5 flex items-center flex-col justify-between hover:scale-95 active:scale-95 focus:scale-95 transition-all duration-300 cursor-pointer`}
               >
                 <div className="sm:max-h-[140px] max-h-[100px] w-full">
                   <Image
