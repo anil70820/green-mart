@@ -19,6 +19,10 @@ export const NAV_LINKS_LIST = [
     title: "Favorites",
     url: "#Favorites",
   },
+  {
+    title: "Operators",
+    url: "/mongo-operators",
+  },
 ];
 export const CARDS_LIST = [
   {

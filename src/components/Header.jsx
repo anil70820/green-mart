@@ -58,19 +58,19 @@ const Header = () => {
                 );
               })}
             </ul>
-            <Cta
+            <Link href="/cart"
               onClick={() => setIsOpen(false)}
-              className="sm:hidden mt-6 max-w-[173px] !h-[46px] w-full text-center bg-transparent !border-black !text-black border shadow-none hover:!border-green hover:!text-green active:!border-green focus:!text-green focus:!border-green active:!text-green"
+              className="sm:hidden mt-6 max-w-[173px] !h-[46px] w-full text-center bg-transparent !border-black !text-black border shadow-none hover:!border-green hover:!text-green active:!border-green focus:!text-green focus:!border-green active:!text-green p-4 font-inter font-medium md:text-lg text-base  leading-[100%] rounded-[50px]  md:h-[54px] flex items-center justify-center cursor-pointer hover:bg-transparent active:bg-transparent focus:bg-transparent  transition-all duration-300"
             >
               Order Delivery
-            </Cta>
+            </Link>
           </div>
-          <Cta
+          <Link href="/cart"
             onClick={() => setIsOpen(false)}
-            className="max-sm:hidden max-w-[173px] !h-[46px] w-full text-center bg-transparent !border-black !text-black border shadow-none hover:!border-green hover:!text-green active:!border-green focus:!text-green focus:!border-green active:!text-green"
+            className="max-sm:hidden max-w-[173px] !h-[46px] w-full text-center bg-transparent !border-black !text-black border shadow-none hover:!border-green hover:!text-green active:!border-green focus:!text-green focus:!border-green active:!text-green p-4 font-inter font-medium md:text-lg text-base leading-[100%] rounded-[50px] md:h-[54px] flex items-center justify-center cursor-pointer hover:bg-transparent active:bg-transparent focus:bg-transparent transition-all duration-300"
           >
             Order Delivery
-          </Cta>
+          </Link>
           <button
             aria-label="menu"
             onClick={toggleMenu}

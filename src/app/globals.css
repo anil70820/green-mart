@@ -17,16 +17,6 @@
   --leading-100: 100%;
   --text-13: 13px;
 }
-/* 
-:root {
-  --color-light-green: #17750d;
-  --color-off-black: #030303;
-  --color-dark-black: #181725;
-   --color-red: #FC3030;
-    --color-off-white: #F3F3F3;
-   --leading-100:100%;
-   --text-13:13px;
-} */
 
 @font-face {
   font-family: "Gilroy-Bold";
@@ -135,4 +125,8 @@ button span.ml-4 {
 
 .animate-slide-out {
   animation: slide-out 0.5s ease-in-out forwards;
+}
+
+.scrollbar_hidden ::-webkit-scrollbar {
+  display: none;
 }
