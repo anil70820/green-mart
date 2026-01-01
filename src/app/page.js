@@ -7,11 +7,9 @@ import Faqs from "@/components/Faqs";
 import FeaturedProducts from "@/components/FeaturedProducts";
 import Footer from "@/components/Footer";
 import GoogleReview from "@/components/GoogleReview";
-import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import OurCategories from "@/components/OurCategories";
 import Preloader from "@/components/Preloader";
-import TitleBar from "@/components/TitleBar";
 import WhyUs from "@/components/WhyUs";
 import { useEffect, useState } from "react";
 export default function Home() {
@@ -24,10 +22,9 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="overflow-x-clip max-w-[1920px] mx-auto">
+    <div className="overflow-x-clip max-w-480 mx-auto">
         <Preloader isLoading={isLoading} />
-      <TitleBar />
-      <Header />
+    
       <Hero/>
       <Cards />
       <WhyUs />

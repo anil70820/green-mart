@@ -1,9 +1,12 @@
 import CartPage from "@/components/cart/CartPage";
+import ProtectedRoute from "@/components/common/ProtectedRoute";
 
 const page = () => {
   return (
     <div>
-      <CartPage/>
+      <ProtectedRoute>
+        <CartPage />
+      </ProtectedRoute>
     </div>
   );
 };

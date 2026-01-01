@@ -61,7 +61,7 @@ export default function OrdersPage() {
     <main className="min-h-screen bg-[#F5F7FA] py-10">
       <div className="max-w-5xl mx-auto px-4">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
+       <div className="flex items-center justify-between mb-6">
           <div>
             <h1 className="text-2xl font-semibold text-gray-900">My Orders</h1>
             <p className="text-sm text-gray-500">
@@ -104,10 +104,10 @@ export default function OrdersPage() {
             {filteredOrders.map((order) => (
               <div
                 key={order.id}
-                className="bg-white rounded-3xl shadow-sm p-4 flex items-center gap-4"
+                className="bg-white rounded-3xl shadow-sm p-4 flex sm:items-center gap-4 sm:flex-row flex-col"
               >
                 {/* Thumbnail */}
-                <div className="w-20 h-20 rounded-2xl overflow-hidden bg-gray-100 flex-shrink-0">
+                <div className="sm:w-24 sm:h-30 w-20 h-20 rounded-2xl overflow-hidden bg-gray-100 shrink-0">
                   <img
                     src={order.thumbnail}
                     alt={order.id}
@@ -116,7 +116,7 @@ export default function OrdersPage() {
                 </div>
 
                 {/* Order info */}
-                <div className="flex-1">
+                <div className="flex flex-col flex-1 justify-between">
                   <div className="flex justify-between items-start">
                     <div>
                       <p className="text-xs text-gray-400">Order ID</p>
@@ -140,7 +140,7 @@ export default function OrdersPage() {
                   </div>
 
                   {/* Bottom row */}
-                  <div className="mt-3 flex justify-between items-center">
+                  <div className="mt-3 flex justify-between sm:items-start items-center">
                     <div className="text-xs text-gray-500">
                       <p>
                         Items:{" "}

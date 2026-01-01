@@ -1,77 +1,42 @@
 "use client";
+import Icons from "@/components/common/Icons";
+import { fetchWishlist, removeFromWishlist } from "@/redux/slice/wishlistSlice";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
-import Icons from "./common/Icons";
-import { FEATURED_PRODUCTS_LIST } from "@/utils/helper";
-import Cta from "./common/Cta";
-import api from "@/utils/axios";
-import { useDispatch } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AiOutlineDelete } from "react-icons/ai";
 import { addToCart } from "@/redux/slice/cartSlice";
-import { addToWishlist } from "@/redux/slice/wishlistSlice";
 
-const FeaturedProducts = () => {
-  const [heartIcon, setHeartIcon] = useState(
-    Array(FEATURED_PRODUCTS_LIST.length).fill(false)
-  );
-  const [product, setProduct] = useState([]);
-  const [showAllProducts, setShowAllProducts] = useState(false);
+const page = () => {
   const dispatch = useDispatch();
-  const toggleHeartIcon = (index) => {
-    setHeartIcon((prev) => prev.map((item, i) => (i === index ? !item : item)));
-  };
-  const toggleShowAllProducts = () => {
-    setShowAllProducts((prev) => !prev);
-  };
-  const fetchProducts = async () => {
-    try {
-      const res = await api.get("/product/all-products");
-      console.log("products:", res);
-      setProduct(Array.isArray(res.data.products) ? res.data.products : []);
-    } catch (err) {
-      console.log(err);
-      setProduct([]);
-    }
-  };
+  const { items: wishlist, loading } = useSelector((state) => state.wishlist);
 
-  const handleAddToCart = (product) => {
-    dispatch(
-      addToCart({
-        productId: product._id,
-        quantity: 1,
-      })
-    );
-  };
   useEffect(() => {
-    fetchProducts();
-  }, []);
-  useEffect(() => {
-    if (product.length > 0) {
-      setHeartIcon(Array(product.length).fill(false));
-    }
-  }, [product]);
-  const handleAdd = (productId) => {
-    dispatch(addToWishlist(productId));
+    dispatch(fetchWishlist());
+  }, [dispatch]);
+
+  console.log("wishlist:", wishlist);
+
+  const handleRemove = (product) => {
+    dispatch(removeFromWishlist(product.product._id));
+    console.log("wishlist product id:",product.product._id)
   };
+   const handleAddToCart = (product) => {
+      dispatch(
+        addToCart({
+          productId: product.product._id,
+          quantity: 1,
+        })
+      );
+    };
   return (
     <div className="lg:py-16 md:py-12 sm:py-9 py-6 relative">
-      <Image
-        className="absolute -left-12 -bottom-5 pointer-events-none -z-10 max-md:hidden"
-        src="/assets/images/png/strawberries_ellipses.png"
-        alt="straberries"
-        width={124}
-        height={117}
-      />
       <div className="container xl:max-w-285 mx-auto px-5 xl:px-0">
         <h2 className="font-gilroy-bold text-off-black text-center xl:text-[54px] lg:text-5xl md:text-4xl text-3xl leading-[130%] md:mb-6 mb-5">
-          Featured Products
+          Wishlist Products
         </h2>
         <div className="grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2 lg:gap-6 md:gap-5 gap-3">
-          {(Array.isArray(product)
-            ? showAllProducts
-              ? product
-              : product.slice(0, 4)
-            : []
-          ).map((product, index) => {
+          {wishlist.map((product, index) => {
             return (
               <div
                 key={index}
@@ -81,24 +46,15 @@ const FeaturedProducts = () => {
                   20% Off
                 </p>
                 <span
-                  onClick={() => {
-                    toggleHeartIcon(index);
-                    handleAdd(product._id);
-                  }}
-                  className="cursor-pointer absolute md:top-4.5 top-2 md:right-4.5 right-2"
+                  onClick={() => handleRemove(product)}
+                  className="cursor-pointer absolute md:top-4.5 top-2 md:right-4.5 right-2 group duration-300 transition-all"
                 >
-                  <Icons
-                    icon="heartIcon"
-                    toggleIcon={`${heartIcon[index] ? "stroke-red" : ""}`}
-                    toggleIconFill={`${
-                      heartIcon[index] ? "fill-red stroke-red" : ""
-                    }`}
-                  />
+                  <AiOutlineDelete size={22} className="group-hover:text-red-500 duration-300 transition-all"/>
                 </span>
                 <div className="sm:max-h-36.5 max-h-25 w-full mt-16">
                   <Image
-                    src={product.images?.[0]}
-                    alt={product.title}
+                    src={product.product.images?.[0]}
+                    alt={product.product.title}
                     fill={false}
                     width={0}
                     height={0}
@@ -109,7 +65,7 @@ const FeaturedProducts = () => {
                 <div className="sm:p-4.5 p-2">
                   <div className="flex justify-between gap-4 mb-1">
                     <p className="font-normal text-light-green/60 leading-100 text-13 font-inter">
-                      {product.categoryName}
+                      {product.product.categoryName}
                     </p>
                     <p className="text-black flex items-center gap-0.5 font-inter font-medium leading-100 md:text-xl sm:text-lg text-base">
                       <Image
@@ -118,20 +74,20 @@ const FeaturedProducts = () => {
                         width={24}
                         height={24}
                       />
-                      {product.rating}
+                      {product.product.rating}
                     </p>
                   </div>
                   <h3 className="font-inter font-semibold md:text-lg sm:text-base text-sm text-black leading-100 md:mb-1.5 mb-1 max-w-full line-clamp-2 overflow-ellipsis">
-                    {product.title}
+                    {product.product.title}
                   </h3>
                   <p className="font-inter font-normal md:text-sm text-xs text-black-600 leading-100 md:mb-4 mb-2">
-                    {product.weight}
+                    {product.product.weight}
                   </p>
                   <div className="flex sm:items-center justify-between gap-2 max-sm:flex-col">
                     <p className="font-inter font-semibold md:text-base sm:text-sm text-xs text-black">
-                      ${product.price.toFixed(2)}
+                      ${product.product.price.toFixed(2)}
                       <del className="font-medium md:text-xs text-[10px] text-[#6D6D6D] ms-1">
-                        ${product.discountPrice.toFixed(2)}
+                        ${product.product.discountPrice.toFixed(2)}
                       </del>
                     </p>
                     <button
@@ -150,15 +106,14 @@ const FeaturedProducts = () => {
             );
           })}
         </div>
-        <Cta
-          onClick={toggleShowAllProducts}
-          className="mt-10 max-w-53.75 mx-auto"
-        >
-          {showAllProducts ? "View Less Products" : "View All Products"}
-        </Cta>
+          {wishlist.length === 0 && (
+              <div className="bg-gray-100 rounded-3xl p-6 text-center text-black">
+                Your Wishlist is empty.
+              </div>
+            )}
       </div>
     </div>
   );
 };
 
-export default FeaturedProducts;
+export default page;

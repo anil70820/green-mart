@@ -19,10 +19,6 @@ export const NAV_LINKS_LIST = [
     title: "Favorites",
     url: "#Favorites",
   },
-  {
-    title: "Operators",
-    url: "/mongo-operators",
-  },
 ];
 export const CARDS_LIST = [
   {
@@ -486,10 +482,11 @@ export const DEALS_PRODUCT_SLIDER_LIST = [
 ];
 
 export const PRELOADER_IMAGES_LIST = [
+  "/assets/images/png/strawberries.png",
+  "/assets/images/png/cauliflower.png",
+  "/assets/images/png/almond_milk.png",
+  "/assets/images/png/apple.png",
+  "/assets/images/png/lemon.png",
+];
 
-    "/assets/images/png/strawberries.png",
-    "/assets/images/png/cauliflower.png",
-    "/assets/images/png/almond_milk.png",
-    "/assets/images/png/apple.png",
-    "/assets/images/png/lemon.png",
-]
+
