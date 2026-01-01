@@ -5,19 +5,26 @@ import Image from "next/image";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AiOutlineDelete } from "react-icons/ai";
-import { addToCart } from "@/redux/slice/cartSlice";
+import { addToCart, fetchCart } from "@/redux/slice/cartSlice";
+import { toast } from "react-toastify";
+import Link from "next/link";
 
 const page = () => {
   const dispatch = useDispatch();
   const { items: wishlist, loading } = useSelector((state) => state.wishlist);
+  const cartItems = useSelector((state) => state.cart.items);
+  const isInCart = (productId) =>
+    cartItems.some((item) => item.product?._id === productId);
 
   useEffect(() => {
     dispatch(fetchWishlist());
+     dispatch(fetchCart());
   }, [dispatch]);
 
   const handleRemove = (product) => {
     dispatch(removeFromWishlist(product.product._id));
     dispatch(fetchWishlist());
+     toast.success("Product Removed fromyour Wishlist.")
   };
   const handleAddToCart = (product) => {
     dispatch(
@@ -26,6 +33,7 @@ const page = () => {
         quantity: 1,
       })
     );
+     toast.success("Product added to your Cart.")
   };
   return (
     <div className="lg:py-16 md:py-12 sm:py-9 py-6 relative">
@@ -100,16 +108,28 @@ const page = () => {
                           ${Number(product.product.discountPrice).toFixed(2)}
                         </del>
                       </p>
+                       {isInCart(product.product._id) ? (
+                      <Link href="/cart"
+                        className="rounded-lg bg-green-500/20 hover:bg-green-500/10 duration-300 text-green-700 p-1 h-7 sm:text-sm text-xs font-medium font-inter sm:max-w-20 w-full flex items-center justify-center gap-1"
+                      >
+                         <Icons
+                          icon="cartIcon"
+                          className="group-hover:stroke-white transition-all duration-300"
+                        />
+                        View
+                      </Link>
+                    ) : (
                       <button
                         onClick={() => handleAddToCart(product)}
-                        className="cursor-pointer rounded-lg bg-[#B8DDB4]/45 p-1 h-7 sm:text-sm text-xs font-medium font-inter sm:max-w-16.75 w-full flex items-center justify-center gap-1 hover:bg-light-green hover:text-white active:bg-light-green active:text-white focus:bg-light-green focus:text-white transition-all duration-300 group"
+                        className="cursor-pointer rounded-lg bg-[#B8DDB4]/45 p-1 h-7 sm:text-sm text-xs font-medium font-inter sm:max-w-16.75 w-full flex items-center justify-center gap-1 hover:bg-light-green hover:text-white transition-all duration-300 group"
                       >
                         <Icons
                           icon="cartIcon"
-                          className="group-hover:stroke-white group-active:stroke-white group-focus:stroke-white transition-all duration-300"
+                          className="group-hover:stroke-white transition-all duration-300"
                         />
                         Add
                       </button>
+                    )}
                     </div>
                   </div>
                 </div>

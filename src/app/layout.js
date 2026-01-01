@@ -45,7 +45,7 @@ export default function RootLayout({ children }) {
   const pathname = ["/auth", "/orders"];
   return (
     <html lang="en">
-      <body>
+      <body data-new-gr-c-s-check-loaded="14.1267.0" data-gr-ext-installed="">
         <ReduxProvider>
           {!pathname.includes(path) && <TitleBar />}
           {!pathname.includes(path) && <Header />}
