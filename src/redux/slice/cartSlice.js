@@ -84,11 +84,27 @@ const cartSlice = createSlice({
       })
 
       /* REMOVE FROM CART */
+      .addCase(removeFromCart.pending, (state) => {
+        state.loading = true;
+      })
       .addCase(removeFromCart.fulfilled, (state, action) => {
         state.items = action.payload.items;
       })
+      .addCase(removeFromCart.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+
+      // UPDATE PRODUCT QUANTITY
+      .addCase(updateQuantity.pending, (state) => {
+        state.loading = true;
+      })
       .addCase(updateQuantity.fulfilled, (state, action) => {
         state.items = action.payload.items;
+      })
+      .addCase(updateQuantity.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
       });
   },
 });

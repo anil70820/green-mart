@@ -1,24 +1,31 @@
 "use client";
-import Image from "next/image";
-import React, { useEffect, useState } from "react";
-import Icons from "./common/Icons";
-import { FEATURED_PRODUCTS_LIST } from "@/utils/helper";
-import Cta from "./common/Cta";
+import { addToCart, fetchCart } from "@/redux/slice/cartSlice";
+import {
+  addToWishlist,
+  fetchWishlist,
+  removeFromWishlist,
+} from "@/redux/slice/wishlistSlice";
 import api from "@/utils/axios";
-import { useDispatch } from "react-redux";
-import { addToCart } from "@/redux/slice/cartSlice";
-import { addToWishlist } from "@/redux/slice/wishlistSlice";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Cta from "./common/Cta";
+import Icons from "./common/Icons";
+import { toast } from "react-toastify";
+import Link from "next/link";
 
 const FeaturedProducts = () => {
-  const [heartIcon, setHeartIcon] = useState(
-    Array(FEATURED_PRODUCTS_LIST.length).fill(false)
-  );
   const [product, setProduct] = useState([]);
   const [showAllProducts, setShowAllProducts] = useState(false);
   const dispatch = useDispatch();
-  const toggleHeartIcon = (index) => {
-    setHeartIcon((prev) => prev.map((item, i) => (i === index ? !item : item)));
-  };
+  const  wishlist = useSelector((state) => state.wishlist.items);
+  const cartItems = useSelector((state) => state.cart.items);
+  const isInCart = (productId) =>
+    cartItems.some((item) => item.product?._id === productId);
+
+  const isInWishlist = (productId) =>
+    wishlist.some((item) => item.productId === productId);
+
   const toggleShowAllProducts = () => {
     setShowAllProducts((prev) => !prev);
   };
@@ -40,18 +47,26 @@ const FeaturedProducts = () => {
         quantity: 1,
       })
     );
+    toast.success("Product added to your Cart.");
   };
   useEffect(() => {
     fetchProducts();
   }, []);
   useEffect(() => {
-    if (product.length > 0) {
-      setHeartIcon(Array(product.length).fill(false));
+    dispatch(fetchWishlist());
+     dispatch(fetchCart());
+  }, [dispatch]);
+
+  const handleWishlistToggle = (productId) => {
+    if (isInWishlist(productId)) {
+      dispatch(removeFromWishlist(productId));
+      toast.success("Product removed from your wishlist.");
+    } else {
+      dispatch(addToWishlist(productId));
+      toast.success("Product added to your wishlist.");
     }
-  }, [product]);
-  const handleAdd = (productId) => {
-    dispatch(addToWishlist(productId));
   };
+
   return (
     <div className="lg:py-16 md:py-12 sm:py-9 py-6 relative">
       <Image
@@ -81,20 +96,18 @@ const FeaturedProducts = () => {
                   20% Off
                 </p>
                 <span
-                  onClick={() => {
-                    toggleHeartIcon(index);
-                    handleAdd(product._id);
-                  }}
+                  onClick={() => handleWishlistToggle(product._id)}
                   className="cursor-pointer absolute md:top-4.5 top-2 md:right-4.5 right-2"
                 >
                   <Icons
                     icon="heartIcon"
-                    toggleIcon={`${heartIcon[index] ? "stroke-red" : ""}`}
-                    toggleIconFill={`${
-                      heartIcon[index] ? "fill-red stroke-red" : ""
-                    }`}
+                    toggleIcon={isInWishlist(product._id) ? "stroke-red" : ""}
+                    toggleIconFill={
+                      isInWishlist(product._id) ? "fill-red stroke-red" : ""
+                    }
                   />
                 </span>
+
                 <div className="sm:max-h-36.5 max-h-25 w-full mt-16">
                   <Image
                     src={product.images?.[0]}
@@ -134,16 +147,28 @@ const FeaturedProducts = () => {
                         ${product.discountPrice.toFixed(2)}
                       </del>
                     </p>
-                    <button
-                      onClick={() => handleAddToCart(product)}
-                      className="cursor-pointer rounded-lg bg-[#B8DDB4]/45 p-1 h-7 sm:text-sm text-xs font-medium font-inter sm:max-w-16.75 w-full flex items-center justify-center gap-1 hover:bg-light-green hover:text-white active:bg-light-green active:text-white focus:bg-light-green focus:text-white transition-all duration-300 group"
-                    >
-                      <Icons
-                        icon="cartIcon"
-                        className="group-hover:stroke-white group-active:stroke-white group-focus:stroke-white transition-all duration-300"
-                      />
-                      Add
-                    </button>
+                    {isInCart(product._id) ? (
+                      <Link href="/cart"
+                        className="rounded-lg bg-green-500/20 hover:bg-green-500/10 duration-300 text-green-700 p-1 h-7 sm:text-sm text-xs font-medium font-inter sm:max-w-20 w-full flex items-center justify-center gap-1"
+                      >
+                         <Icons
+                          icon="cartIcon"
+                          className="group-hover:stroke-white transition-all duration-300"
+                        />
+                        View
+                      </Link>
+                    ) : (
+                      <button
+                        onClick={() => handleAddToCart(product)}
+                        className="cursor-pointer rounded-lg bg-[#B8DDB4]/45 p-1 h-7 sm:text-sm text-xs font-medium font-inter sm:max-w-16.75 w-full flex items-center justify-center gap-1 hover:bg-light-green hover:text-white transition-all duration-300 group"
+                      >
+                        <Icons
+                          icon="cartIcon"
+                          className="group-hover:stroke-white transition-all duration-300"
+                        />
+                        Add
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>

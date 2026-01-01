@@ -8,6 +8,7 @@ import {
 import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Cta from "../common/Cta";
+import { toast } from "react-toastify";
 
 export default function CartPage() {
   const dispatch = useDispatch();
@@ -40,11 +41,13 @@ export default function CartPage() {
         quantity: item.quantity + 1,
       })
     );
+    toast.success("Product quantity Increased.")
   };
 
   const decrementQty = (item) => {
     if (item.quantity === 1) {
       dispatch(removeFromCart({ productId: item.product._id }));
+       toast.success("Product Removed from your Cart.")
     } else {
       dispatch(
         updateQuantity({
@@ -52,6 +55,7 @@ export default function CartPage() {
           quantity: item.quantity - 1,
         })
       );
+       toast.success("Product quantity Decreased.")
     }
   };
 

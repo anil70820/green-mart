@@ -23,7 +23,7 @@ export default function Home() {
 
   return (
     <div className="overflow-x-clip max-w-480 mx-auto">
-        <Preloader isLoading={isLoading} />
+        {/* <Preloader isLoading={isLoading} /> */}
     
       <Hero/>
       <Cards />
