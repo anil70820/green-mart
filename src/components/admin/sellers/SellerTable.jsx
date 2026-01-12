@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Pagination from "../common/Pagination";
 const sellers = [
   {
@@ -300,7 +300,7 @@ const SellerTable = () => {
   }, [filteredSeller, page]);
 
   // reset page on search/filter
-  React.useEffect(() => {
+  useEffect(() => {
     setPage(1);
   }, [search, status]);
   return (

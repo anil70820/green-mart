@@ -1,15 +1,25 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import ProductsListSm from "./ProductsListSm";
+import Pagination from "@/components/admin/common/Pagination";
+import Dropdown from "@/components/common/Dropdown";
+import Table from "@/components/common/table/Table";
+import TableCell from "@/components/common/table/TableCell";
+import TableHead from "@/components/common/table/TableHead";
+import TableRow from "@/components/common/table/TableRow";
 import api from "@/utils/axios";
 import Link from "next/link";
+import { useEffect, useMemo, useState } from "react";
+import Confirm from "../modals/Confirm";
+import ProductsListSm from "./ProductsListSm";
 
 const ProductsList = () => {
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
   const [tab, setTab] = useState("all");
-
+  const [openDelete, setOpenDelete] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
+  const [page, setPage] = useState(1);
+  const PRODUCT_PER_PAGE = 10;
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -23,11 +33,7 @@ const ProductsList = () => {
           images: p.images,
           description: p.description,
           status:
-            p.stock === 0
-              ? "inactive"
-              : p.stock <= 20
-              ? "low stock"
-              : "active",
+            p.stock === 0 ? "inactive" : p.stock <= 20 ? "low stock" : "active",
         }));
         setProducts(mappedProducts);
       } catch (err) {
@@ -53,7 +59,26 @@ const ProductsList = () => {
       return matchSearch && matchTab;
     });
   }, [search, tab, products]);
+  const handleDelete = async (id) => {
+    try {
+      await api.delete(`/seller/product/${id}`);
 
+      // UI se product remove (no refetch needed)
+      setProducts((prev) => prev.filter((p) => p.id !== id));
+    } catch (err) {
+      console.error(err);
+      alert(err.response?.data?.message || "Delete failed");
+    }
+  };
+  const paginatedProducts = useMemo(() => {
+    const start = (page - 1) * PRODUCT_PER_PAGE;
+    return filteredProducts.slice(start, start + PRODUCT_PER_PAGE);
+  }, [filteredProducts, page]);
+
+  // reset page on search/filter
+  useEffect(() => {
+    setPage(1);
+  }, [search, tab, products]);
   return (
     <div className="px-5 mt-2 pt-3 pb-5 overflow-y-auto h-[calc(100vh-90px)]">
       <div className="flex-1 flex flex-col overflow-hidden">
@@ -75,7 +100,10 @@ const ProductsList = () => {
               />
             </div>
 
-            <Link href="/seller/products/add-new-product" className="rounded-xl bg-[#13ec13] px-5 py-2.5 text-white font-medium hover:bg-[#13ec13]/70 duration-300 cursor-pointer">
+            <Link
+              href="/seller/products/add-new-product"
+              className="rounded-xl bg-[#13ec13] px-5 py-2.5 text-white font-medium hover:bg-[#13ec13]/70 duration-300 cursor-pointer"
+            >
               + Add Product
             </Link>
           </div>
@@ -102,36 +130,31 @@ const ProductsList = () => {
             ))}
           </div>
         </div>
-
-        {/* ===== TABLE ===== */}
-        <div className="max-sm:hidden flex-1 overflow-auto rounded-xl bg-white dark:bg-[#1a331a] ring-1 ring-gray-100 dark:ring-gray-800">
-          <table className="min-w-full">
-            <thead className="sticky top-0 bg-gray-50 dark:bg-gray-800 z-10">
-              <tr className="text-xs text-[#618961]">
-                <th className="p-3 flex items-center justify-start">Sr. No.</th>
-                <th className="text-left">Product</th>
-                <th className="text-left">Category</th>
-                <th className="text-left">Price</th>
-                <th className="text-left">Stock</th>
-                <th className="text-left">Status</th>
-                <th />
+        <div className="max-sm:hidden w-full overflow-hidden rounded-xl border border-[#e5e7eb] bg-white shadow-sm mt-8">
+          <Table>
+            <TableHead>
+              <tr>
+                <TableCell className="text-left">Product</TableCell>
+                <TableCell className="text-left">Category</TableCell>
+                <TableCell className="text-left">Price</TableCell>
+                <TableCell className="text-left">Stock</TableCell>
+                <TableCell className="text-left">Status</TableCell>
+                <TableCell className="text-right">Actions</TableCell>
               </tr>
-            </thead>
+            </TableHead>
 
             <tbody>
-              {filteredProducts.map((p, index) => (
-                <tr
-                  key={p.id}
-                  className="hover:bg-gray-50 dark:hover:bg-gray-800"
-                >
-                  <td className="p-3 min-w-16 font-medium ps-4">{index + 1}</td>
-                  <td className="font-medium text-[#111811] dark:text-[#e0e6e0] min-w-50">
+              {paginatedProducts.map((p) => (
+                <TableRow key={p.id}>
+                  <TableCell className="font-medium text-[#111811] dark:text-[#e0e6e0] min-w-50">
                     {p.name}
-                  </td>
-                  <td className="text-[#618961] min-w-40">{p.category}</td>
-                  <td className="min-w-20">${p.price}</td>
-                  <td className="min-w-20">{p.stock}</td>
-                  <td className="min-w-30">
+                  </TableCell>
+                  <TableCell className="text-[#618961] min-w-40">
+                    {p.category}
+                  </TableCell>
+                  <TableCell className="min-w-20">${p.price}</TableCell>
+                  <TableCell className="min-w-20">{p.stock}</TableCell>
+                  <TableCell className="min-w-30">
                     <span
                       className={`px-2 py-1 rounded-full text-xs font-medium capitalize
                     ${
@@ -144,20 +167,67 @@ const ProductsList = () => {
                     >
                       {p.status}
                     </span>
-                  </td>
-                  <td className="text-right pr-4">⋮</td>
-                </tr>
+                  </TableCell>
+                  <TableCell className="text-right pr-4">
+                    <Dropdown
+                      trigger={
+                        <span className="material-symbols-outlined md:text-xl! text-lg! hover:text-green-400 duration-300">
+                          more_vert
+                        </span>
+                      }
+                    >
+                      <button className="px-5 py-2 text-left hover:bg-black/5 min-w-35">
+                        View
+                      </button>
+                      <button className="px-5 py-2 text-left hover:bg-black/5 min-w-35">
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => {
+                          setSelectedId(p.id);
+                          setOpenDelete(true);
+                        }}
+                        className="px-5 py-2 text-left hover:bg-black/5 min-w-35"
+                      >
+                        Delete
+                      </button>
+                    </Dropdown>
+                  </TableCell>
+                </TableRow>
               ))}
             </tbody>
-          </table>
+          </Table>
+          <Pagination
+            currentPage={page}
+            totalItems={filteredProducts.length}
+            itemsPerPage={PRODUCT_PER_PAGE}
+            onPageChange={setPage}
+          />
         </div>
+
         {/* ======= MOBILE VIEW ==== */}
         <div className="flex flex-col gap-3 sm:hidden">
-          {filteredProducts.map((product) => (
+          {paginatedProducts.map((product) => (
             <ProductsListSm key={product.id} product={product} />
           ))}
+          <Pagination
+            currentPage={page}
+            totalItems={filteredProducts.length}
+            itemsPerPage={PRODUCT_PER_PAGE}
+            onPageChange={setPage}
+          />
         </div>
       </div>
+      <Confirm
+        heading="Delete Product"
+        paragraph="Are you sure you want to delete this product? This action cannot be
+          undone."
+        cancel="cancel"
+        success="delete"
+        open={openDelete}
+        onclose={() => setOpenDelete(false)}
+        handleDelete={() => handleDelete(selectedId)}
+      />
     </div>
   );
 };
