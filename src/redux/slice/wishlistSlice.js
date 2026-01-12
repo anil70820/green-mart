@@ -10,7 +10,7 @@ export const fetchWishlist = createAsyncThunk(
   "wishlist/fetch",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await api.get("/user/wishlist");
+      const res = await api.get("/wishlist");
       return res.data.wishlist;
     } catch (err) {
       return rejectWithValue(err.response?.data || err.message);
@@ -23,7 +23,7 @@ export const addToWishlist = createAsyncThunk(
   "wishlist/add",
   async (productId, { rejectWithValue }) => {
     try {
-      const res = await api.post("/user/wishlist/add", { productId });
+      const res = await api.post("/wishlist/add", { productId });
       return res.data.wishlist;
     } catch (err) {
       return rejectWithValue(err.response?.data || err.message);
@@ -36,7 +36,7 @@ export const removeFromWishlist = createAsyncThunk(
   "wishlist/remove",
   async (productId, { rejectWithValue }) => {
     try {
-      const res = await api.post("/user/wishlist/remove", { productId });
+      const res = await api.post("/wishlist/remove", { productId });
       return res.data.wishlist;
     } catch (err) {
       return rejectWithValue(err.response?.data || err.message);

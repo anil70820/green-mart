@@ -128,5 +128,5 @@ button span.ml-4 {
 }
 
 .scrollbar_hidden ::-webkit-scrollbar {
-  display: none;
+  display: none !important;
 }
