@@ -1,57 +1,58 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import ProductsListSm from "./ProductsListSm";
+import api from "@/utils/axios";
+import Link from "next/link";
 
-const PRODUCTS = [
-  {
-    id: 1,
-    name: "Organic Avocados",
-    sku: "12345",
-    category: "Fresh Produce",
-    price: 2.5,
-    stock: 145,
-    status: "active",
-  },
-  {
-    id: 2,
-    name: "Bamboo Toothbrush",
-    sku: "67890",
-    category: "Personal Care",
-    price: 5,
-    stock: 12,
-    status: "low stock",
-  },
-  {
-    id: 3,
-    name: "Metal Water Bottle",
-    sku: "99821",
-    category: "Accessories",
-    price: 15,
-    stock: 0,
-    status: "inactive",
-  },
-];
 const ProductsList = () => {
+  const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
   const [tab, setTab] = useState("all");
 
-  /* ================= FILTER ================= */
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await api.get("/seller/all-products");
+        const mappedProducts = res.data.products.map((p) => ({
+          id: p._id,
+          name: p.title,
+          category: p.categoryName,
+          price: p.discountPrice || p.price,
+          stock: p.stock,
+          images: p.images,
+          description: p.description,
+          status:
+            p.stock === 0
+              ? "inactive"
+              : p.stock <= 20
+              ? "low stock"
+              : "active",
+        }));
+        setProducts(mappedProducts);
+      } catch (err) {
+        console.error("Error fetching products:", err);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
   const filteredProducts = useMemo(() => {
-    return PRODUCTS.filter((p) => {
+    return products.filter((p) => {
       const matchSearch =
         p.name.toLowerCase().includes(search.toLowerCase()) ||
-        p.sku.includes(search);
+        p.category.toLowerCase().includes(search.toLowerCase());
 
       const matchTab =
         tab === "all" ||
-        (tab === "low" && p.stock > 0 && p.stock <= 20) ||
+        (tab === "low" && p.status === "low stock") ||
         (tab === "active" && p.status === "active") ||
         (tab === "inactive" && p.status === "inactive");
 
       return matchSearch && matchTab;
     });
-  }, [search, tab]);
+  }, [search, tab, products]);
 
   return (
     <div className="px-5 mt-2 pt-3 pb-5 overflow-y-auto h-[calc(100vh-90px)]">
@@ -67,16 +68,16 @@ const ProductsList = () => {
               <input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search by name, SKU..."
+                placeholder="Search by name, category..."
                 className="w-full rounded-xl bg-white dark:bg-[#1a331a] py-2.5 pl-10 pr-4
               text-sm text-[#111811] dark:text-[#e0e6e0]
               border border-gray-200 focus:border-[#13ec13] outline-none"
               />
             </div>
 
-            <button className="rounded-xl bg-[#13ec13] px-5 py-2.5 text-white font-medium">
+            <Link href="/seller/products/add-new-product" className="rounded-xl bg-[#13ec13] px-5 py-2.5 text-white font-medium hover:bg-[#13ec13]/70 duration-300 cursor-pointer">
               + Add Product
-            </button>
+            </Link>
           </div>
           {/* Tabs */}
           <div className="flex gap-2 overflow-x-auto">
@@ -109,7 +110,6 @@ const ProductsList = () => {
               <tr className="text-xs text-[#618961]">
                 <th className="p-3 flex items-center justify-start">Sr. No.</th>
                 <th className="text-left">Product</th>
-                <th className="text-left">SKU</th>
                 <th className="text-left">Category</th>
                 <th className="text-left">Price</th>
                 <th className="text-left">Stock</th>
@@ -124,13 +124,10 @@ const ProductsList = () => {
                   key={p.id}
                   className="hover:bg-gray-50 dark:hover:bg-gray-800"
                 >
-                  <td className="p-3 min-w-16 font-medium ps-4">
-                    {index + 1}
-                  </td>
+                  <td className="p-3 min-w-16 font-medium ps-4">{index + 1}</td>
                   <td className="font-medium text-[#111811] dark:text-[#e0e6e0] min-w-50">
                     {p.name}
                   </td>
-                  <td className="text-[#618961] min-w-24">{p.sku}</td>
                   <td className="text-[#618961] min-w-40">{p.category}</td>
                   <td className="min-w-20">${p.price}</td>
                   <td className="min-w-20">{p.stock}</td>

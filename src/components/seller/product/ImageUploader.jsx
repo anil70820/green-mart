@@ -1,5 +1,6 @@
 "use client";
 import { useRef } from "react";
+import { toast } from "react-toastify";
 
 const MAX_IMAGES = 5;
 
@@ -12,7 +13,7 @@ const ImageUploader = ({ images, setImages }) => {
     );
 
     if (images.length + valid.length > MAX_IMAGES) {
-      alert("Max 5 images allowed");
+      toast.warning("Max 5 images allowed");
       return;
     }
 
@@ -34,7 +35,7 @@ const ImageUploader = ({ images, setImages }) => {
       }}
       className="flex flex-col items-center justify-center gap-4 rounded-2xl
       border-2 border-dashed border-[#dbe6db] dark:border-[#2a402a]
-      bg-[#ffffff] dark:bg-[#162b16] px-6 py-10"
+      bg-[#ffffff] dark:bg-[#162b16] sm:px-6 sm:py-10 p-5"
     >
       <input
         ref={inputRef}
@@ -62,18 +63,18 @@ const ImageUploader = ({ images, setImages }) => {
 
       {/* Preview */}
       {images.length > 0 && (
-        <div className="mt-4 grid grid-cols-5 gap-2">
+        <div className="mt-4 grid xl:grid-cols-5 grid-cols-3 gap-5">
           {images.map((img, i) => (
             <div key={i} className="relative h-16 w-16">
               <img
                 src={img.preview}
-                className="h-full w-full rounded-md object-cover"
+                className="h-full w-full rounded-md object-contain"
               />
               <button
                 onClick={() =>
                   setImages(images.filter((_, index) => index !== i))
                 }
-                className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1"
+                className="absolute text-sm font-semibold -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex justify-center items-center"
               >
                 ✕
               </button>

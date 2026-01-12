@@ -1,19 +1,9 @@
-import React from 'react'
+import React from "react";
 
-const ProductsListSm = ({product}) => {
-      const {
-    name,
-    sku,
-    category,
-    price,
-    stock,
-    status,
-    image,
-  } = product;
-
-  const isInactive = status === "Inactive";
+const ProductsListSm = ({ product }) => {
+  const isInactive = product.status === "Inactive";
   return (
-      <div
+    <div
       className={`lg:hidden group relative flex flex-col gap-3 rounded-xl
         bg-white dark:bg-[#1a331a] p-3 shadow-sm ring-1 ring-gray-100 dark:ring-gray-800
         transition-all active:scale-[0.99]
@@ -22,13 +12,11 @@ const ProductsListSm = ({product}) => {
       <div className="flex gap-3">
         {/* Image */}
         <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800">
-          <div
-            className={`h-full w-full bg-cover bg-center ${
-              isInactive ? "grayscale" : ""
-            }`}
-            style={{ backgroundImage: `url(${image})` }}
+          <img
+            className="h-full w-full object-contain"
+            src={product.images?.[0]}
+            alt={product.name}
           />
-
           {isInactive && (
             <div className="absolute inset-0 flex items-center justify-center bg-black/10">
               <span className="material-symbols-outlined text-white">
@@ -49,25 +37,25 @@ const ProductsListSm = ({product}) => {
                     : "text-[#111811] dark:text-[#e0e6e0]"
                 }`}
               >
-                {name}
+                {product.name}
               </h3>
 
               <button
-                className="p-1 -mr-2 rounded-full text-[#618961]
+                className=" -mr-2 rounded-full text-[#618961]
                 hover:bg-gray-100 dark:hover:bg-gray-700"
               >
-                <span className="material-symbols-outlined text-[20px]">
+                <span className="material-symbols-outlined text-[18px]!">
                   more_vert
                 </span>
               </button>
             </div>
 
-            <p className="text-xs text-[#618961] dark:text-[#8fab8f] mt-0.5">
-              SKU: {sku} • {category}
+            <p className="text-xs text-[#618961] dark:text-[#8fab8f]">
+              {product.category}
             </p>
           </div>
 
-          <div className="flex items-end justify-between mt-2">
+          <div className="flex items-end justify-between">
             <div>
               <span className="text-xs text-[#618961] dark:text-[#8fab8f]">
                 Price
@@ -77,7 +65,7 @@ const ProductsListSm = ({product}) => {
                   isInactive ? "text-gray-500" : "text-[#111811] dark:text-[#e0e6e0]"
                 }`}
               >
-                ${price}
+                ${product.price}
               </div>
             </div>
 
@@ -92,18 +80,18 @@ const ProductsListSm = ({product}) => {
                         : "bg-gray-200 text-gray-600"
                     }`}
                     >
-                      {status}
+                      {product.status}
                     </span>
 
               <span className="mt-1 text-xs font-medium text-[#618961] dark:text-[#8fab8f]">
-                {stock} in stock
+                {product.stock} in stock
               </span>
             </div>
           </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ProductsListSm
+export default ProductsListSm;
