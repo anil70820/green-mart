@@ -20,6 +20,7 @@ const ProductsList = () => {
   const [selectedId, setSelectedId] = useState(null);
   const [page, setPage] = useState(1);
   const PRODUCT_PER_PAGE = 10;
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -59,6 +60,7 @@ const ProductsList = () => {
       return matchSearch && matchTab;
     });
   }, [search, tab, products]);
+
   const handleDelete = async (id) => {
     try {
       await api.delete(`/seller/product/${id}`);
@@ -70,15 +72,16 @@ const ProductsList = () => {
       alert(err.response?.data?.message || "Delete failed");
     }
   };
+
   const paginatedProducts = useMemo(() => {
     const start = (page - 1) * PRODUCT_PER_PAGE;
     return filteredProducts.slice(start, start + PRODUCT_PER_PAGE);
   }, [filteredProducts, page]);
 
-  // reset page on search/filter
   useEffect(() => {
     setPage(1);
   }, [search, tab, products]);
+
   return (
     <div className="px-5 mt-2 pt-3 pb-5 overflow-y-auto h-[calc(100vh-90px)]">
       <div className="flex-1 flex flex-col overflow-hidden">
@@ -208,8 +211,16 @@ const ProductsList = () => {
         {/* ======= MOBILE VIEW ==== */}
         <div className="flex flex-col gap-3 sm:hidden">
           {paginatedProducts.map((product) => (
-            <ProductsListSm key={product.id} product={product} />
+            <ProductsListSm
+              key={product.id}
+              product={product}
+              onDelete={(id) => {
+                setSelectedId(id);
+                setOpenDelete(true);
+              }}
+            />
           ))}
+
           <Pagination
             currentPage={page}
             totalItems={filteredProducts.length}
@@ -225,9 +236,10 @@ const ProductsList = () => {
         cancel="cancel"
         success="delete"
         open={openDelete}
-        onclose={() => setOpenDelete(false)}
+        onClose={() => setOpenDelete(false)}
         handleDelete={() => handleDelete(selectedId)}
       />
+      
     </div>
   );
 };

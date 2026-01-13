@@ -1,8 +1,13 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
 const Modal = ({ open, onClose, children, width = "max-w-md" }) => {
+   const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   // ESC close
   useEffect(() => {
     if (!open) return;
@@ -15,7 +20,7 @@ const Modal = ({ open, onClose, children, width = "max-w-md" }) => {
     return () => document.removeEventListener("keydown", handleEsc);
   }, [open, onClose]);
 
-  if (!open) return null;
+  if (!mounted ||!open) return null;
 
   return createPortal(
     <div className={`fixed inset-0 z-50 flex items-center justify-center `}>

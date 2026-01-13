@@ -1,12 +1,13 @@
-import React from "react";
+"use client";
+import Dropdown from "@/components/common/Dropdown";
 
-const ProductsListSm = ({ product }) => {
+const ProductsListSm = ({ product, onDelete }) => {
   const isInactive = product.status === "Inactive";
   return (
     <div
       className={`lg:hidden group relative flex flex-col gap-3 rounded-xl
         bg-white dark:bg-[#1a331a] p-3 shadow-sm ring-1 ring-gray-100 dark:ring-gray-800
-        transition-all active:scale-[0.99]
+        transition-all hover:scale-[0.99]
         ${isInactive ? "opacity-75" : ""}`}
     >
       <div className="flex gap-3">
@@ -40,29 +41,46 @@ const ProductsListSm = ({ product }) => {
                 {product.name}
               </h3>
 
-              <button
-                className=" -mr-2 rounded-full text-[#618961]
-                hover:bg-gray-100 dark:hover:bg-gray-700"
+              <Dropdown
+                trigger={
+                  <span className="material-symbols-outlined md:text-xl! text-lg! hover:text-green-400 duration-300">
+                    more_vert
+                  </span>
+                }
               >
-                <span className="material-symbols-outlined text-[18px]!">
-                  more_vert
-                </span>
-              </button>
-            </div>
+                <button className="px-5 py-2 text-left hover:bg-black/5 min-w-35">
+                  View
+                </button>
+                <button className="px-5 py-2 text-left hover:bg-black/5 min-w-35">
+                  Edit
+                </button>
 
+                <button
+                  onMouseDown={(e) => {
+                    e.stopPropagation();
+                    onDelete(product.id);
+                  }}
+                  className="px-5 py-2 text-left hover:bg-black/5 min-w-35"
+                >
+                  Delete
+                </button>
+              </Dropdown>
+            </div>
             <p className="text-xs text-[#618961] dark:text-[#8fab8f]">
               {product.category}
             </p>
           </div>
 
-          <div className="flex items-end justify-between">
-            <div>
-              <span className="text-xs text-[#618961] dark:text-[#8fab8f]">
-                Price
+          <div className="flex items-center justify-between">
+            <div className="flex gap-2 items-center">
+              <span className="text-sm font-medium text-[#618961] dark:text-[#8fab8f]">
+                Price:
               </span>
               <div
-                className={`font-bold ${
-                  isInactive ? "text-gray-500" : "text-[#111811] dark:text-[#e0e6e0]"
+                className={`font-semibold ${
+                  isInactive
+                    ? "text-gray-500"
+                    : "text-[#111811] dark:text-[#e0e6e0]"
                 }`}
               >
                 ${product.price}
@@ -70,18 +88,18 @@ const ProductsListSm = ({ product }) => {
             </div>
 
             <div className="flex flex-col items-end">
-                  <span
-                      className={`px-2 py-1 rounded-full text-xs font-medium capitalize
+              <span
+                className={`px-2 py-1 rounded-full text-xs font-medium capitalize
                     ${
-                      status === "active"
+                      product.status === "active"
                         ? "bg-green-100 text-green-700"
-                        : status === "low stock"
+                        : product.status === "low stock"
                         ? "bg-orange-100 text-orange-700"
                         : "bg-gray-200 text-gray-600"
                     }`}
-                    >
-                      {product.status}
-                    </span>
+              >
+                {product.status}
+              </span>
 
               <span className="mt-1 text-xs font-medium text-[#618961] dark:text-[#8fab8f]">
                 {product.stock} in stock

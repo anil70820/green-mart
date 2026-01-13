@@ -3,7 +3,7 @@ import React from "react";
 
 const Confirm = ({
   open,
-  onclose,
+  onClose,
   handleDelete,
   heading,
   paragraph,
@@ -11,7 +11,7 @@ const Confirm = ({
   success,
 }) => {
   return (
-    <Modal open={open} onClose={onclose}>
+    <Modal open={open} onClose={onClose}>
       <div className="p-6 space-y-4">
         <h2 className="text-lg font-bold text-[#111811] dark:text-[#e8f5e8]">
           {heading}
@@ -21,7 +21,7 @@ const Confirm = ({
 
         <div className="flex justify-end gap-3 pt-4">
           <button
-            onClick={onclose}
+            onClick={onClose}
             className="px-4 py-2 rounded-xl border border-gray-300 capitalize hover:bg-gray-200 duration-300 cursor-pointer"
           >
             {cancel}
@@ -30,7 +30,7 @@ const Confirm = ({
           <button
             onClick={() => {
               handleDelete();
-              onclose();
+              onClose();
             }}
             className="px-4 py-2 rounded-xl bg-red-600 text-white capitalize hover:bg-red-600/70 duration-300 cursor-pointer"
           >

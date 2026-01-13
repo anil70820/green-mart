@@ -12,8 +12,8 @@ const TopBar = ({ title = "Dashboard", onMenuClick }) => {
       {/* Mobile Menu Button */}
       <button
         onClick={onMenuClick}
-        className="p-2 -ml-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/10
-        text-[#111811] dark:text-[#e0e6e0] lg:hidden"
+        className="rounded-full
+        text-[#111811] hover:text-green-600 duration-300 cursor-pointer lg:hidden"
       >
         <span className="material-symbols-outlined">menu</span>
       </button>

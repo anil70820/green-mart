@@ -3,15 +3,32 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 const menuItems = [
   { name: "Dashboard", icon: "dashboard", href: "/admin/dashboard" },
   { name: "Users", icon: "people", href: "/admin/user-management" },
   { name: "Sellers", icon: "badge", href: "/admin/seller-management" },
-   { name: "Products", icon: "inventory_2", href: "/admin/seller-products-management" },
-  { name: "Orders", icon: "shopping_cart", href: "/admin/seller-order-management" },
-  { name: "Payments", icon: "payments", href: "/admin/payments-and-Commissions" },
-  { name: "Return", icon: "assignment_return", href: "/admin/returns-management" },
+  {
+    name: "Products",
+    icon: "inventory_2",
+    href: "/admin/seller-products-management",
+  },
+  {
+    name: "Orders",
+    icon: "shopping_cart",
+    href: "/admin/seller-order-management",
+  },
+  {
+    name: "Payments",
+    icon: "payments",
+    href: "/admin/payments-and-Commissions",
+  },
+  {
+    name: "Return",
+    icon: "assignment_return",
+    href: "/admin/returns-management",
+  },
   { name: "Disputes", icon: "warning", href: "/admin/disputes" },
 ];
 
@@ -41,18 +58,21 @@ const SideBar = ({ open, setOpen }) => {
         <div className="flex flex-col h-full p-4">
           {/* Header */}
           <div className="flex items-center justify-between pb-6 border-b border-gray-100 dark:border-gray-800 mb-4">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center text-[#0a3d0a] font-bold">
-                G
-              </div>
-              <span className="text-lg font-bold text-[#111811] dark:text-[#e0e6e0]">
-                Green-Mart
-              </span>
-            </div>
+            <Link href="/" className="relative z-[99]">
+              <Image
+                src="/assets/images/svg/logo.svg"
+                alt="Logo"
+                width={246}
+                height={55}
+                className="lg:w-[246px] w-[180px] h-auto"
+                sizes="100vw"
+              />
+            </Link>
 
             <button
               onClick={() => setOpen(false)}
-              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-[#525c52] dark:text-[#a0baa0] lg:hidden"
+              className="rounded-full
+        text-[#111811] hover:text-green-600 duration-300 cursor-pointer lg:hidden"
             >
               <span className="material-symbols-outlined">close</span>
             </button>

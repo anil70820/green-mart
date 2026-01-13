@@ -12,8 +12,8 @@ const TopBar = ({ title = "Dashboard", onMenuClick }) => {
       {/* Mobile Menu Button */}
       <button
         onClick={onMenuClick}
-        className="p-2 -ml-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/10
-        text-[#111811] dark:text-[#e0e6e0] lg:hidden"
+        className="rounded-full
+        text-[#111811] hover:text-green-600 duration-300 cursor-pointer lg:hidden"
       >
         <span className="material-symbols-outlined">menu</span>
       </button>
@@ -40,9 +40,7 @@ const TopBar = ({ title = "Dashboard", onMenuClick }) => {
             <p className="text-sm font-semibold text-[#111811] dark:text-[#e0e6e0]">
               Marcus
             </p>
-            <p className="text-xs text-[#525c52] dark:text-[#a0baa0]">
-             Admin
-            </p>
+            <p className="text-xs text-[#525c52] dark:text-[#a0baa0]">Admin</p>
           </div>
 
           <div className="w-10 h-10 rounded-full overflow-hidden border border-gray-200 dark:border-gray-700">

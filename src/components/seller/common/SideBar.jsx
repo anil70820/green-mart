@@ -3,11 +3,16 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 const menuItems = [
   { name: "Dashboard", icon: "dashboard", href: "/seller/dashboard" },
   { name: "Products", icon: "inventory_2", href: "/seller/products" },
-  { name: "Add New Product", icon: "add_circle", href: "/seller/products/add-new-product" },
+  {
+    name: "Add New Product",
+    icon: "add_circle",
+    href: "/seller/products/add-new-product",
+  },
   { name: "Orders", icon: "shopping_cart", href: "/seller/orders" },
   { name: "Returns", icon: "keyboard_return", href: "/seller/returns" },
   { name: "Payments", icon: "payments", href: "/seller/payments" },
@@ -39,18 +44,21 @@ const SideBar = ({ open, setOpen }) => {
         <div className="flex flex-col h-full p-4">
           {/* Header */}
           <div className="flex items-center justify-between pb-6 border-b border-gray-100 dark:border-gray-800 mb-4">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center text-[#0a3d0a] font-bold">
-                G
-              </div>
-              <span className="text-lg font-bold text-[#111811] dark:text-[#e0e6e0]">
-                Green-Mart
-              </span>
-            </div>
+            <Link href="/" className="relative z-[99]">
+              <Image
+                src="/assets/images/svg/logo.svg"
+                alt="Logo"
+                width={246}
+                height={55}
+                className="lg:w-[246px] w-[180px] h-auto"
+                sizes="100vw"
+              />
+            </Link>
 
             <button
               onClick={() => setOpen(false)}
-              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-[#525c52] dark:text-[#a0baa0] lg:hidden"
+              className="rounded-full
+        text-[#111811] hover:text-green-600 duration-300 cursor-pointer lg:hidden"
             >
               <span className="material-symbols-outlined">close</span>
             </button>
