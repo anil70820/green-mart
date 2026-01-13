@@ -1,11 +1,16 @@
 "use client";
-import { useState } from "react";
-import ImageUploader from "./ImageUploader";
-import api from "@/utils/axios";
 import InputField from "@/components/common/InputField";
+import api from "@/utils/axios";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import ImageUploader from "./ImageUploader";
 
 const AddNewProduct = () => {
+    const router = useRouter();
+  const searchParams = useSearchParams();
+  const productId = searchParams.get("productId");
   const [images, setImages] = useState([]);
   const [product, setProduct] = useState({
     title: "",
@@ -18,52 +23,68 @@ const AddNewProduct = () => {
     description: "",
   });
   const [loading, setLoading] = useState(false);
+  const [isUpdate, setIsUpdate] = useState(false);
+  useEffect(() => {
+    if (!productId) return;
+
+    const fetchProduct = async () => {
+      try {
+        const { data } = await api.get(`/seller/product/${productId}`);
+
+        console.log(data);
+        const p = data.product;
+        setProduct({
+          title: p.title,
+          categoryName: p.categoryName,
+          price: p.price,
+          discountPrice: p.discountPrice,
+          weight: p.weight,
+          stock: p.stock,
+          rating: p.rating,
+          description: p.description,
+        });
+
+        setImages(
+          p.images.map((img) => ({
+            file: null,
+            preview: img,
+          }))
+        );
+
+        setIsUpdate(true);
+      } catch (err) {
+        toast.error("Product not found");
+      }
+    };
+
+    fetchProduct();
+  }, [productId]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProduct((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handlePublish = async () => {
-    const {
-      title,
-      categoryName,
-      price,
-      discountPrice,
-      weight,
-      stock,
-      rating,
-      description,
-    } = product;
+ const handlePublish = async () => {
+  const formData = new FormData();
+  Object.entries(product).forEach(([k, v]) => formData.append(k, v));
+  images.forEach((img) => img.file && formData.append("image", img.file));
 
-    if (
-      !title ||
-      !categoryName ||
-      !price ||
-      !discountPrice ||
-      !weight ||
-      !stock ||
-      !rating ||
-      !description ||
-      images.length === 0
-    ) {
-      toast.error("All fields and at least 3 image are required!");
-      return;
-    }
+  try {
+    setLoading(true);
 
-    const formData = new FormData();
-    Object.entries(product).forEach(([key, value]) =>
-      formData.append(key, value)
-    );
-    images.forEach((img) => formData.append("image", img.file));
+    const response = isUpdate
+      ? await api.put(`/seller/update-product/${productId}`, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        })
+      : await api.post("/seller/add-product", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
 
-    try {
-      setLoading(true);
-      const { data } = await api.post("/seller/add-product", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      toast.success(data.message);
-      // Reset form
+    toast.success(response.data.message);
+
+    // ✅ ADD PRODUCT → form reset
+    if (!isUpdate) {
       setProduct({
         title: "",
         categoryName: "Fruits",
@@ -75,13 +96,19 @@ const AddNewProduct = () => {
         description: "",
       });
       setImages([]);
-    } catch (err) {
-      console.log(err);
-      toast.error(err.response?.data?.message || "Something went wrong");
-    } finally {
-      setLoading(false);
     }
-  };
+
+    // ✅ UPDATE PRODUCT → redirect
+    if (isUpdate) {
+      router.push("/seller/products");
+    }
+  } catch (err) {
+    toast.error(err.response?.data?.message || "Something went wrong");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <main className="p-6 bg-[#f6f8f6] dark:bg-[#102210] min-h-[calc(100vh-73px)]">
@@ -175,7 +202,7 @@ const AddNewProduct = () => {
         </section>
 
         {/* Buttons */}
-        <section className="rounded-2xl bg-[#ffffff] dark:bg-[#162b16] p-5 grid grid-cols-2 gap-4 sm:min-h-50 min-h-20">
+        <section className="rounded-2xl bg-[#ffffff] dark:bg-[#162b16] p-5 grid sm:grid-cols-2 gap-4 sm:min-h-50 min-h-20">
           <button
             className="rounded-xl border border-black/10 dark:border-white/10 py-3 h-12 cursor-pointer"
             onClick={() => alert("Draft feature not implemented yet")}
@@ -187,7 +214,13 @@ const AddNewProduct = () => {
             disabled={loading}
             className="rounded-xl bg-[#13ec13] text-[#052e05] py-3 font-bold h-12 cursor-pointer"
           >
-            {loading ? "Publishing..." : "Publish"}
+            {loading
+              ? isUpdate
+                ? "Updating..."
+                : "Publishing..."
+              : isUpdate
+              ? "Update Product"
+              : "Publish"}
           </button>
         </section>
       </div>

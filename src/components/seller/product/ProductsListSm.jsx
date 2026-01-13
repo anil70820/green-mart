@@ -1,7 +1,12 @@
 "use client";
 import Dropdown from "@/components/common/Dropdown";
+import { setSelectedProduct } from "@/redux/slice/seller/productSlice";
+import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
 
 const ProductsListSm = ({ product, onDelete }) => {
+  const dispatch = useDispatch();
+  const router = useRouter();
   const isInactive = product.status === "Inactive";
   return (
     <div
@@ -51,7 +56,16 @@ const ProductsListSm = ({ product, onDelete }) => {
                 <button className="px-5 py-2 text-left hover:bg-black/5 min-w-35">
                   View
                 </button>
-                <button className="px-5 py-2 text-left hover:bg-black/5 min-w-35">
+                <button
+                  onClick={() => {
+                    dispatch(setSelectedProduct(product));
+
+                    router.push(
+                      `/seller/products/add-new-product?productId=${product._id}`
+                    );
+                  }}
+                  className="px-5 py-2 text-left hover:bg-black/5 min-w-35"
+                >
                   Edit
                 </button>
 
@@ -90,15 +104,19 @@ const ProductsListSm = ({ product, onDelete }) => {
             <div className="flex flex-col items-end">
               <span
                 className={`px-2 py-1 rounded-full text-xs font-medium capitalize
-                    ${
-                      product.status === "active"
-                        ? "bg-green-100 text-green-700"
-                        : product.status === "low stock"
-                        ? "bg-orange-100 text-orange-700"
-                        : "bg-gray-200 text-gray-600"
-                    }`}
+    ${
+      product.stock > 10
+        ? "bg-green-100 text-green-700"
+        : product.stock > 0
+        ? "bg-orange-100 text-orange-700"
+        : "bg-red-100 text-red-700"
+    }`}
               >
-                {product.status}
+                {product.stock > 10
+                  ? "active"
+                  : product.stock > 0
+                  ? "low stock"
+                  : "rejected"}
               </span>
 
               <span className="mt-1 text-xs font-medium text-[#618961] dark:text-[#8fab8f]">

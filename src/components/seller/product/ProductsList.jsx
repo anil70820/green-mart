@@ -11,6 +11,9 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import Confirm from "../modals/Confirm";
 import ProductsListSm from "./ProductsListSm";
+import { useDispatch } from "react-redux";
+import { useRouter } from "next/navigation";
+import { setSelectedProduct } from "@/redux/slice/seller/productSlice";
 
 const ProductsList = () => {
   const [products, setProducts] = useState([]);
@@ -20,23 +23,13 @@ const ProductsList = () => {
   const [selectedId, setSelectedId] = useState(null);
   const [page, setPage] = useState(1);
   const PRODUCT_PER_PAGE = 10;
-
+  const dispatch = useDispatch();
+  const router = useRouter();
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const res = await api.get("/seller/all-products");
-        const mappedProducts = res.data.products.map((p) => ({
-          id: p._id,
-          name: p.title,
-          category: p.categoryName,
-          price: p.discountPrice || p.price,
-          stock: p.stock,
-          images: p.images,
-          description: p.description,
-          status:
-            p.stock === 0 ? "inactive" : p.stock <= 20 ? "low stock" : "active",
-        }));
-        setProducts(mappedProducts);
+        setProducts(res.data.products);
       } catch (err) {
         console.error("Error fetching products:", err);
       }
@@ -48,8 +41,8 @@ const ProductsList = () => {
   const filteredProducts = useMemo(() => {
     return products.filter((p) => {
       const matchSearch =
-        p.name.toLowerCase().includes(search.toLowerCase()) ||
-        p.category.toLowerCase().includes(search.toLowerCase());
+        p.title.toLowerCase().includes(search.toLowerCase()) ||
+        p.categoryName.toLowerCase().includes(search.toLowerCase());
 
       const matchTab =
         tab === "all" ||
@@ -63,7 +56,7 @@ const ProductsList = () => {
 
   const handleDelete = async (id) => {
     try {
-      await api.delete(`/seller/product/${id}`);
+      await api.delete(`/seller/delete-product/${id}`);
 
       // UI se product remove (no refetch needed)
       setProducts((prev) => prev.filter((p) => p.id !== id));
@@ -148,27 +141,31 @@ const ProductsList = () => {
 
             <tbody>
               {paginatedProducts.map((p) => (
-                <TableRow key={p.id}>
+                <TableRow key={p._id}>
                   <TableCell className="font-medium text-[#111811] dark:text-[#e0e6e0] min-w-50">
-                    {p.name}
+                    {p.title}
                   </TableCell>
                   <TableCell className="text-[#618961] min-w-40">
-                    {p.category}
+                    {p.categoryName}
                   </TableCell>
                   <TableCell className="min-w-20">${p.price}</TableCell>
                   <TableCell className="min-w-20">{p.stock}</TableCell>
                   <TableCell className="min-w-30">
                     <span
                       className={`px-2 py-1 rounded-full text-xs font-medium capitalize
-                    ${
-                      p.status === "active"
-                        ? "bg-green-100 text-green-700"
-                        : p.status === "low stock"
-                        ? "bg-orange-100 text-orange-700"
-                        : "bg-gray-200 text-gray-600"
-                    }`}
+                             ${
+                               p.stock > 10
+                                 ? "bg-green-100 text-green-700"
+                                 : p.stock > 0
+                                 ? "bg-orange-100 text-orange-700"
+                                 : "bg-red-100 text-red-700"
+                             }`}
                     >
-                      {p.status}
+                      {p.stock > 10
+                        ? "active"
+                        : p.stock > 0
+                        ? "low stock"
+                        : "rejected"}
                     </span>
                   </TableCell>
                   <TableCell className="text-right pr-4">
@@ -182,7 +179,16 @@ const ProductsList = () => {
                       <button className="px-5 py-2 text-left hover:bg-black/5 min-w-35">
                         View
                       </button>
-                      <button className="px-5 py-2 text-left hover:bg-black/5 min-w-35">
+                      <button
+                        onClick={() => {
+                          dispatch(setSelectedProduct(p));
+
+                          router.push(
+                            `/seller/products/add-new-product?productId=${p._id}`
+                          );
+                        }}
+                        className="px-5 py-2 text-left hover:bg-black/5 min-w-35"
+                      >
                         Edit
                       </button>
                       <button
@@ -212,7 +218,7 @@ const ProductsList = () => {
         <div className="flex flex-col gap-3 sm:hidden">
           {paginatedProducts.map((product) => (
             <ProductsListSm
-              key={product.id}
+              key={product._id}
               product={product}
               onDelete={(id) => {
                 setSelectedId(id);
@@ -239,7 +245,6 @@ const ProductsList = () => {
         onClose={() => setOpenDelete(false)}
         handleDelete={() => handleDelete(selectedId)}
       />
-      
     </div>
   );
 };
