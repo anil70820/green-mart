@@ -14,6 +14,7 @@ import ProductsListSm from "./ProductsListSm";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { setSelectedProduct } from "@/redux/slice/seller/productSlice";
+import { PRODUCTS_TAB_LIST } from "@/utils/helper";
 
 const ProductsList = () => {
   const [products, setProducts] = useState([]);
@@ -105,12 +106,7 @@ const ProductsList = () => {
           </div>
           {/* Tabs */}
           <div className="flex gap-2 overflow-x-auto">
-            {[
-              { key: "all", label: "All Items" },
-              { key: "low", label: "Low Stock" },
-              { key: "active", label: "Active" },
-              { key: "inactive", label: "Inactive" },
-            ].map((t) => (
+            {PRODUCTS_TAB_LIST.map((t) => (
               <button
                 key={t.key}
                 onClick={() => setTab(t.key)}
@@ -140,70 +136,80 @@ const ProductsList = () => {
             </TableHead>
 
             <tbody>
-              {paginatedProducts.map((p) => (
-                <TableRow key={p._id}>
-                  <TableCell className="font-medium text-[#111811] dark:text-[#e0e6e0] min-w-50">
-                    {p.title}
-                  </TableCell>
-                  <TableCell className="text-[#618961] min-w-40">
-                    {p.categoryName}
-                  </TableCell>
-                  <TableCell className="min-w-20">${p.price}</TableCell>
-                  <TableCell className="min-w-20">{p.stock}</TableCell>
-                  <TableCell className="min-w-30">
-                    <span
-                      className={`px-2 py-1 rounded-full text-xs font-medium capitalize
-                             ${
-                               p.stock > 10
-                                 ? "bg-green-100 text-green-700"
-                                 : p.stock > 0
-                                 ? "bg-orange-100 text-orange-700"
-                                 : "bg-red-100 text-red-700"
-                             }`}
-                    >
-                      {p.stock > 10
-                        ? "active"
-                        : p.stock > 0
-                        ? "low stock"
-                        : "rejected"}
-                    </span>
-                  </TableCell>
-                  <TableCell className="text-right pr-4">
-                    <Dropdown
-                      trigger={
-                        <span className="material-symbols-outlined md:text-xl! text-lg! hover:text-green-400 duration-300">
-                          more_vert
-                        </span>
-                      }
-                    >
-                      <button className="px-5 py-2 text-left hover:bg-black/5 min-w-35">
-                        View
-                      </button>
-                      <button
-                        onClick={() => {
-                          dispatch(setSelectedProduct(p));
+              {paginatedProducts.length !== 0 ? (
+                paginatedProducts.map((p) => (
+                  <TableRow key={p._id}>
+                    <TableCell className="font-medium text-[#111811] dark:text-[#e0e6e0] min-w-50">
+                      {p.title}
+                    </TableCell>
+                    <TableCell className="text-[#618961] min-w-40">
+                      {p.categoryName}
+                    </TableCell>
+                    <TableCell className="min-w-20">${p.price}</TableCell>
+                    <TableCell className="min-w-20">{p.stock}</TableCell>
+                    <TableCell className="min-w-30">
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs font-medium capitalize
+                               ${
+                                 p.stock > 10
+                                   ? "bg-green-100 text-green-700"
+                                   : p.stock > 0
+                                   ? "bg-orange-100 text-orange-700"
+                                   : "bg-red-100 text-red-700"
+                               }`}
+                      >
+                        {p.stock > 10
+                          ? "active"
+                          : p.stock > 0
+                          ? "low stock"
+                          : "rejected"}
+                      </span>
+                    </TableCell>
+                    <TableCell className="text-right pr-4">
+                      <Dropdown
+                        trigger={
+                          <span className="material-symbols-outlined md:text-xl! text-lg! hover:text-green-400 duration-300">
+                            more_vert
+                          </span>
+                        }
+                      >
+                        <button className="px-5 py-2 text-left hover:bg-black/5 min-w-35">
+                          View
+                        </button>
+                        <button
+                          onClick={() => {
+                            dispatch(setSelectedProduct(p));
 
-                          router.push(
-                            `/seller/products/add-new-product?productId=${p._id}`
-                          );
-                        }}
-                        className="px-5 py-2 text-left hover:bg-black/5 min-w-35"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => {
-                          setSelectedId(p.id);
-                          setOpenDelete(true);
-                        }}
-                        className="px-5 py-2 text-left hover:bg-black/5 min-w-35"
-                      >
-                        Delete
-                      </button>
-                    </Dropdown>
-                  </TableCell>
-                </TableRow>
-              ))}
+                            router.push(
+                              `/seller/products/add-new-product?productId=${p._id}`
+                            );
+                          }}
+                          className="px-5 py-2 text-left hover:bg-black/5 min-w-35"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => {
+                            setSelectedId(p.id);
+                            setOpenDelete(true);
+                          }}
+                          className="px-5 py-2 text-left hover:bg-black/5 min-w-35"
+                        >
+                          Delete
+                        </button>
+                      </Dropdown>
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={6}>
+                    <p className="text-center text-lg font-semibold text-gray-700 my-5 mx-auto">
+                      Product not found.
+                    </p>
+                  </td>
+                </tr>
+              )}
             </tbody>
           </Table>
           <Pagination
@@ -226,7 +232,11 @@ const ProductsList = () => {
               }}
             />
           ))}
-
+          {paginatedProducts.length == 0 && (
+            <p className="text-center text-base font-semibold text-gray-700 my-5 mx-auto">
+              Product not found.
+            </p>
+          )}
           <Pagination
             currentPage={page}
             totalItems={filteredProducts.length}

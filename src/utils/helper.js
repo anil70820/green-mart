@@ -489,4 +489,9 @@ export const PRELOADER_IMAGES_LIST = [
   "/assets/images/png/lemon.png",
 ];
 
-
+export const PRODUCTS_TAB_LIST = [
+  { key: "all", label: "All Items" },
+  { key: "low", label: "Low Stock" },
+  { key: "active", label: "Active" },
+  { key: "inactive", label: "Inactive" },
+];

@@ -35,7 +35,7 @@ const ProductsListSm = ({ product, onDelete }) => {
         {/* Content */}
         <div className="flex flex-1 flex-col justify-between py-0.5">
           <div>
-            <div className="flex justify-between items-start">
+            <div className="flex justify-between items-start gap-3">
               <h3
                 className={`font-bold line-clamp-1 ${
                   isInactive
@@ -43,7 +43,7 @@ const ProductsListSm = ({ product, onDelete }) => {
                     : "text-[#111811] dark:text-[#e0e6e0]"
                 }`}
               >
-                {product.name}
+                {product.title}
               </h3>
 
               <Dropdown
@@ -81,7 +81,7 @@ const ProductsListSm = ({ product, onDelete }) => {
               </Dropdown>
             </div>
             <p className="text-xs text-[#618961] dark:text-[#8fab8f]">
-              {product.category}
+              {product.categoryName}
             </p>
           </div>
 
