@@ -1,12 +1,14 @@
-import AddNewProduct from '@/components/seller/product/AddNewProduct'
-import React from 'react'
+import AddNewProduct from "@/components/seller/product/AddNewProduct";
+import React, { Suspense } from "react";
 
 const page = () => {
   return (
     <div>
-        <AddNewProduct/>
+      <Suspense fallback={null}>
+        <AddNewProduct />
+      </Suspense>
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;
