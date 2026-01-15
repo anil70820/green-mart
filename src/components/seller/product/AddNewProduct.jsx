@@ -175,7 +175,7 @@ const AddNewProduct = () => {
             name="weight"
             value={product.weight}
             onChange={handleChange}
-            type="number"
+            type="text"
             placeholder="Weight (kg / gm)"
           />
           <InputField

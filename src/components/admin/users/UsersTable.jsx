@@ -2,6 +2,9 @@
 import { useEffect, useState } from "react";
 import Pagination from "../common/Pagination";
 import api from "@/utils/axios";
+import { toast } from "react-toastify";
+import Confirm from "@/components/seller/modals/Confirm";
+import Dropdown from "@/components/common/Dropdown";
 
 const UsersTable = () => {
   const [users, setUsers] = useState([]);
@@ -10,6 +13,8 @@ const UsersTable = () => {
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
+    const [selectedId, setSelectedId] = useState(null);
   const USERS_PER_PAGE = 10;
   // 🔹 FETCH USERS (SEARCH + FILTER + PAGINATION FROM BACKEND)
   const fetchUsers = async () => {
@@ -49,13 +54,18 @@ const UsersTable = () => {
     await api.patch(`/admin/user/${id}/status`, {
       status: currentStatus === "active" ? "blocked" : "active",
     });
+    if (currentStatus === "active") {
+      toast.success("User Blocked Successfully!");
+    } else if (currentStatus === "blocked") {
+      toast.success("User Activated Successfully!");
+    }
     fetchUsers();
   };
 
   // 🗑 DELETE USER
   const deleteUser = async (id) => {
-    if (!confirm("Are you sure?")) return;
     await api.delete(`/admin/user/${id}`);
+    toast.success("User Deleted Successfully!")
     fetchUsers();
   };
 
@@ -227,14 +237,34 @@ const UsersTable = () => {
                           block
                         </span>
                       </button>
-                      <button
-                        onClick={() => deleteUser(user._id)}
-                        className="md:w-10 md:h-10 w-8 h-8 flex justify-center items-center rounded-md text-[#6b7280] hover:text-[#111827] hover:bg-gray-100 transition-colors"
+                      <Dropdown
+                        trigger={
+                          <button
+                            
+                            className="md:w-10 md:h-10 w-8 h-8 flex justify-center items-center rounded-md text-[#6b7280] hover:text-[#111827] hover:bg-gray-100 transition-colors"
+                          >
+                            <span className="material-symbols-outlined md:text-xl! text-lg!">
+                              more_vert
+                            </span>
+                          </button>
+                        }
                       >
-                        <span className="material-symbols-outlined md:text-xl! text-lg!">
-                          more_vert
-                        </span>
-                      </button>
+                        <button className="px-5 py-2 text-left hover:bg-black/5 min-w-35">
+                          View
+                        </button>
+                        <button className="px-5 py-2 text-left hover:bg-black/5 min-w-35">
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => {
+                            setSelectedId(user._id);
+                            setOpenDelete(true);
+                          }}
+                          className="px-5 py-2 text-left hover:bg-black/5 min-w-35"
+                        >
+                          Delete
+                        </button>
+                      </Dropdown>
                     </div>
                   </td>
                 </tr>
@@ -249,6 +279,16 @@ const UsersTable = () => {
           onPageChange={setPage}
         />
       </div>
+      <Confirm
+        heading="Delete User"
+        paragraph="Are you sure you want to delete this user? This action cannot be
+                undone."
+        cancel="cancel"
+        success="delete"
+        open={openDelete}
+        onClose={() => setOpenDelete(false)}
+        handleDelete={() => deleteUser(selectedId)}
+      />
     </div>
   );
 };
