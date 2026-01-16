@@ -134,3 +134,9 @@ button span.ml-4 {
 button{
   cursor: pointer;
 }
+
+.btn-success { @apply px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-600/70 duration-300; }
+.btn-danger  { @apply px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-600/70 duration-300; }
+.btn-warning { @apply px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-500/70 duration-300; }
+.btn-primary { @apply px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-600/70 duration-300; }
+.btn-disabled{ @apply px-4 py-2 bg-gray-200 text-gray-500 rounded-md cursor-not-allowed; }

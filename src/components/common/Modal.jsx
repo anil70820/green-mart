@@ -34,8 +34,9 @@ const Modal = ({ open, onClose, children, width = "max-w-md" }) => {
       <div
         className={`relative w-full ${width} mx-4 rounded-2xl duration-300
         bg-white dark:bg-[#162b16]
-        shadow-xl ring-1 ring-black/10 dark:ring-white/10 `}
+        shadow-xl ring-1 ring-black/10 dark:ring-white/10 p-5 md:p-8`}
       >
+        <span onClick={onClose} className="material-symbols-outlined absolute top-3 right-3 cursor-pointer hover:text-green-600 duration-300">close</span>
         {children}
       </div>
     </div>,

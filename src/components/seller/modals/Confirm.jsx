@@ -12,7 +12,7 @@ const Confirm = ({
 }) => {
   return (
     <Modal open={open} onClose={onClose}>
-      <div className="p-6 space-y-4">
+      <div className="space-y-4">
         <h2 className="text-lg font-bold text-[#111811] dark:text-[#e8f5e8]">
           {heading}
         </h2>
