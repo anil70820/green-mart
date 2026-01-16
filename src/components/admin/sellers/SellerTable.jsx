@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import Pagination from "../common/Pagination";
 import Modal from "@/components/common/Modal";
 import { toast } from "react-toastify";
+import Confirm from "@/components/seller/modals/Confirm";
 
 const kycStyles = {
   approved: "bg-green-100 text-green-700 border-green-200",
@@ -32,6 +33,7 @@ const SellerTable = () => {
   const [loading, setLoading] = useState(false);
   const [total, setTotal] = useState(0);
   const [openDelete, setOpenDelete] = useState(false);
+  const [openSellerManage, setOpenSellerManage] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
   const [selectedSeller, setSelectedSeller] = useState(null);
 
@@ -79,9 +81,37 @@ const SellerTable = () => {
     });
 
     toast.success(`KYC ${status}`);
-    setOpenDelete(false);
+    setOpenSellerManage(false);
     setSelectedSeller(null);
     fetchSellers();
+  };
+  const deleteSeller = async (id) => {
+    await api.delete(`/admin/seller/${id}`);
+    toast.success("Seller Deleted Successfully!");
+    fetchSellers();
+  };
+  // 📥 EXPORT CSV
+  const exportCSV = async () => {
+    try {
+      const res = await api.get(
+        `/admin/sellers/export-csv?kycStatus=${kyc}&sellerStatus=${status}`,
+        { responseType: "blob" }
+      );
+
+      const blob = new Blob([res.data], { type: "text/csv" });
+      const url = window.URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `sellers-${kyc || "all"}.csv`;
+
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("CSV export failed", err);
+    }
   };
 
   return (
@@ -138,7 +168,10 @@ const SellerTable = () => {
             </span>
           </div>
 
-          <button className="flex max-sm:min-w-10 items-center text-nowrap justify-center gap-2 hover:bg-[#16a34a]/80 duration-300 cursor-pointer bg-[#16a34a] hover:bg-[#16a34a]-dark text-white font-semibold text-sm px-5 py-1.5 rounded-lg transition-all shadow-sm hover:shadow w-full sm:w-auto">
+          <button
+            onClick={exportCSV}
+            className="flex max-sm:min-w-10 items-center text-nowrap justify-center gap-2 hover:bg-[#16a34a]/80 duration-300 cursor-pointer bg-[#16a34a] hover:bg-[#16a34a]-dark text-white font-semibold text-sm px-5 py-1.5 rounded-lg transition-all shadow-sm hover:shadow w-full sm:w-auto"
+          >
             <span className="material-symbols-outlined text-xl!">download</span>
             Export CSV
           </button>
@@ -295,7 +328,7 @@ const SellerTable = () => {
                     <button
                       onClick={() => {
                         setSelectedSeller(seller);
-                        setOpenDelete(true);
+                        setOpenSellerManage(true);
                       }}
                       className="px-5 py-2 text-left hover:bg-black/5 min-w-35"
                     >
@@ -325,7 +358,7 @@ const SellerTable = () => {
           onPageChange={setPage}
         />
       </div>
-      <Modal open={openDelete} onClose={() => setOpenDelete(false)}>
+      <Modal open={openSellerManage} onClose={() => setOpenSellerManage(false)}>
         <div className="space-y-6">
           {/* KYC ACTIONS */}
           <div>
@@ -356,16 +389,15 @@ const SellerTable = () => {
               >
                 Reject KYC
               </button>
-            {selectedSeller?.status === "rejected" && (
-              <button
-                onClick={() => updateKyc("pending")}
-                className="btn-warning"
-              >
-                Request Re-Submission
-              </button>
-            )}
+              {selectedSeller?.status === "rejected" && (
+                <button
+                  onClick={() => updateKyc("pending")}
+                  className="btn-warning"
+                >
+                  Request Re-Submission
+                </button>
+              )}
             </div>
-
           </div>
 
           {/* SELLER STATUS */}
@@ -403,6 +435,16 @@ const SellerTable = () => {
           )}
         </div>
       </Modal>
+      <Confirm
+        heading="Delete Seller"
+        paragraph="Are you sure you want to delete this Seller? This action cannot be
+                undone."
+        cancel="cancel"
+        success="delete"
+        open={openDelete}
+        onClose={() => setOpenDelete(false)}
+        handleDelete={() => deleteSeller(selectedId)}
+      />
     </div>
   );
 };
