@@ -4,20 +4,16 @@ export const NAV_LINKS_LIST = [
     url: "/",
   },
   {
-    title: "Our Story",
-    url: "#our_story",
-  },
-  {
     title: "Shop",
     url: "#shop",
   },
   {
-    title: "Offers",
-    url: "#Offers",
+    title: "Cart",
+    url: "/cart",
   },
   {
     title: "Favorites",
-    url: "#Favorites",
+    url: "/wishlist",
   },
 ];
 export const CARDS_LIST = [

@@ -32,7 +32,7 @@ const Header = () => {
               alt="Logo"
               width={246}
               height={55}
-              className="lg:w-[246px] w-[180px] h-auto"
+              className="lg:w-61.5 w-45 h-auto"
               sizes="100vw"
             />
           </Link>
@@ -40,7 +40,7 @@ const Header = () => {
             className={`flex items-center md:flex-row flex-col md:static fixed duration-300 md:h-auto  ${
               isOpen
                 ? "right-0 top-0 w-screen h-screen justify-center bg-white z-50"
-                : "right-[-100%] top-0"
+                : "-right-full top-0"
             }`}
           >
             <ul className="flex items-center lg:gap-6 md:gap-4 gap-6 md:flex-row flex-col">
@@ -60,7 +60,7 @@ const Header = () => {
             </ul>
             <Link href="/cart"
               onClick={() => setIsOpen(false)}
-              className="sm:hidden mt-6 max-w-43.25 !h-[46px] w-full text-center bg-transparent !border-black !text-black border shadow-none hover:!border-green hover:text-green! active:border-green! focus:text-green! focus:border-green! active:!text-green p-4 font-inter font-medium md:text-lg text-base  leading-[100%] rounded-[50px]  md:h-[54px] flex items-center justify-center cursor-pointer hover:bg-transparent active:bg-transparent focus:bg-transparent  transition-all duration-300"
+              className="sm:hidden mt-6 max-w-43.25 h-11.5! w-full text-center bg-transparent border-black! text-black! border shadow-none hover:border-green! hover:text-green! active:border-green! focus:text-green! focus:border-green! active:text-green! p-4 font-inter font-medium md:text-lg text-base  leading-100 rounded-[50px]  md:h-13.5 flex items-center justify-center cursor-pointer hover:bg-transparent active:bg-transparent focus:bg-transparent  transition-all duration-300"
             >
               Order Delivery
             </Link>

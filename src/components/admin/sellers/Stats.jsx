@@ -1,3 +1,7 @@
+"use client"
+import api from "@/utils/axios";
+import { useEffect, useState } from "react";
+
 const STATS_CONFIG = {
   "Total Sellers": {
     iconBg: "bg-blue-50",
@@ -28,26 +32,58 @@ const STATS_CONFIG = {
 };
 
 const Stats = () => {
-  const stats = [
-    { title: "Total Sellers", value: "1,240", icon: "store" },
-    { title: "Pending KYC", value: "45", icon: "verified_user" },
-    { title: "Active Stores", value: "1,105", icon: "check_circle" },
-    { title: "Total Revenue", value: "$2.4M", icon: "payments" },
-  ];
+  const [stats, setStats] = useState([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const res = await api.get("/admin/sellers/stats");
+
+        const { totalSellers, pendingKyc, activeStores } = res.data;
+
+        setStats([
+          {
+            title: "Total Sellers",
+            value: totalSellers.count.toLocaleString(),
+            icon: "store",
+            growth: totalSellers.growth,
+          },
+          {
+            title: "Pending KYC",
+            value: pendingKyc.count.toLocaleString(),
+            icon: "verified_user",
+          },
+          {
+            title: "Active Stores",
+            value: activeStores.count.toLocaleString(),
+            icon: "check_circle",
+          },
+        ]);
+      } catch (error) {
+        console.error("Failed to fetch seller stats", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStats();
+  }, []);
+
+  if (loading) return null;
 
   return (
-    <div className="flex gap-6 mb-8 overflow-auto">
+ <div className="flex gap-6 mb-8 overflow-auto">
       {stats.map((s) => {
         const config = STATS_CONFIG[s.title];
 
         return (
           <div
             key={s.title}
-            className="bg-white flex-auto xl:p-6 p-4 rounded-xl border border-[#e5e7eb] shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col justify-between relative overflow-hidden min-w-70"
+            className="bg-white flex-auto xl:p-6 p-4 rounded-xl border border-[#e5e7eb] shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col justify-between min-w-70"
           >
             {/* HEADER */}
             <div className="flex justify-between items-center">
-              <p className="text-[#6b7280] text-sm font-semibold uppercase tracking-wide">
+              <p className="text-[#6b7280] text-sm font-semibold uppercase">
                 {s.title}
               </p>
 
@@ -59,26 +95,39 @@ const Stats = () => {
             </div>
 
             {/* VALUE */}
-            <h3 className="text-[#111827] text-3xl font-bold tracking-tight mt-3">
+            <h3 className="text-[#111827] text-3xl font-bold mt-3">
               {s.value}
             </h3>
 
             {/* FOOTER */}
             <div className="mt-5">
-              {config.footerType === "growth" && (
-                <div className="flex items-center gap-1.5 text-emerald-600 text-xs font-semibold">
-                  <span className="bg-emerald-50 px-1.5 py-0.5 rounded flex items-center gap-1">
+              {/* GROWTH */}
+              {config.footerType === "growth" && s.growth && (
+                <div
+                  className={`flex items-center gap-1.5 text-xs font-semibold ${
+                    s.growth.type === "increase"
+                      ? "text-emerald-600"
+                      : "text-red-600"
+                  }`}
+                >
+                  <span
+                    className="flex items-center gap-1"
+                  >
                     <span className="material-symbols-outlined text-[14px]">
-                      trending_up
+                      {s.growth.type === "increase"
+                        ? "trending_up"
+                        : "trending_down"}
                     </span>
-                    {config.footerValue}
+                    {s.growth.percent}%
                   </span>
-                  <span className="text-[#6b7280] font-medium">
+
+                  <span className="font-medium">
                     {config.footerText}
                   </span>
                 </div>
               )}
 
+              {/* ALERT */}
               {config.footerType === "alert" && (
                 <span className="bg-orange-50 text-orange-600 text-xs font-semibold px-2 py-1 rounded inline-flex items-center gap-1">
                   <span className="material-symbols-outlined text-base!">
@@ -88,6 +137,7 @@ const Stats = () => {
                 </span>
               )}
 
+              {/* INFO */}
               {config.footerType === "info" && (
                 <span className="bg-slate-100 text-[#6b7280] text-xs font-semibold px-2 py-1 rounded">
                   {config.footerText}
