@@ -15,6 +15,7 @@ import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { setSelectedProduct } from "@/redux/slice/seller/productSlice";
 import { PRODUCTS_TAB_LIST } from "@/utils/helper";
+import { statusStyles } from "@/components/admin/sellers/SellerProductsManagemnt";
 
 const ProductsList = () => {
   const [products, setProducts] = useState([]);
@@ -139,30 +140,36 @@ const ProductsList = () => {
               {paginatedProducts.length !== 0 ? (
                 paginatedProducts.map((p) => (
                   <TableRow key={p._id}>
-                    <TableCell className="font-medium text-[#111811] dark:text-[#e0e6e0] min-w-50">
-                      {p.title}
+                    <TableCell className="px-6 py-4 min-w-50">
+                      <div className="flex items-center gap-2">
+                        <img
+                          className="w-10 h-10 rounded object-contain bg-gray-100"
+                          src={p.images[0]}
+                          alt={p.title}
+                        />
+                        <div>
+                          <div className="font-semibold overflow-ellipsis line-clamp-2 max-w-30">
+                            {p.title}
+                          </div>
+                          <div className="text-xs text-gray-500 max-w-30 overflow-ellipsis line-clamp-2">
+                            SKU: {p.sku}
+                          </div>
+                        </div>
+                      </div>
                     </TableCell>
                     <TableCell className="text-[#618961] min-w-40">
                       {p.categoryName}
                     </TableCell>
                     <TableCell className="min-w-20">${p.price}</TableCell>
                     <TableCell className="min-w-20">{p.stock}</TableCell>
-                    <TableCell className="min-w-30">
+                    <TableCell className="px-6 py-4 whitespace-nowrap">
                       <span
-                        className={`px-2 py-1 rounded-full text-xs font-medium capitalize
-                               ${
-                                 p.stock > 10
-                                   ? "bg-green-100 text-green-700"
-                                   : p.stock > 0
-                                   ? "bg-orange-100 text-orange-700"
-                                   : "bg-red-100 text-red-700"
-                               }`}
+                        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border capitalize ${
+                          statusStyles[p.status]
+                        }`}
                       >
-                        {p.stock > 10
-                          ? "active"
-                          : p.stock > 0
-                          ? "low stock"
-                          : "rejected"}
+                        <span className="size-1.5 rounded-full bg-current" />
+                        {p.status}
                       </span>
                     </TableCell>
                     <TableCell className="text-right pr-4">
@@ -181,7 +188,7 @@ const ProductsList = () => {
                             dispatch(setSelectedProduct(p));
 
                             router.push(
-                              `/seller/products/add-new-product?productId=${p._id}`
+                              `/seller/products/add-new-product?productId=${p._id}`,
                             );
                           }}
                           className="px-5 py-2 text-left hover:bg-black/5 min-w-35"

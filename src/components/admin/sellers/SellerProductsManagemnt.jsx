@@ -8,7 +8,7 @@ import TableHead from "@/components/common/table/TableHead";
 import TableRow from "@/components/common/table/TableRow";
 import TableCell from "@/components/common/table/TableCell";
 
-const statusStyles = {
+export const statusStyles = {
   approved: "bg-green-100 text-green-700 border-green-200",
   pending: "bg-yellow-100 text-yellow-700 border-yellow-200",
   rejected: "bg-red-100 text-red-700 border-red-200",
@@ -54,6 +54,42 @@ const SellerProductsManagemnt = () => {
     toast.success("Status Updated");
     fetchProducts();
   };
+  // 📥 EXPORT CSV
+const exportCSV = async () => {
+  try {
+    const res = await api.get(
+      "/admin/products/export-csv",
+      {
+        params: {
+          status: status || "all",
+          category: categories || "all",
+        },
+        responseType: "blob",
+      }
+    );
+
+    const blob = new Blob([res.data], {
+      type: "text/csv;charset=utf-8;",
+    });
+
+    const url = window.URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute(
+      "download",
+      `products-${status}-${categories}.csv`
+    );
+
+    document.body.appendChild(link);
+    link.click();
+
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error("CSV export failed", error);
+  }
+};
 
   return (
     <div>
@@ -100,7 +136,7 @@ const SellerProductsManagemnt = () => {
             >
               <option value="all">All Categories</option>
               <option value="fruits">Fruits</option>
-              <option value="vegitables">Vegitables</option>
+              <option value="vegetables">Vegetables</option>
               <option value="groceries">Groceries</option>
             </select>
 
@@ -108,7 +144,7 @@ const SellerProductsManagemnt = () => {
               expand_more
             </span>
           </div>
-          <button className="flex max-sm:min-w-10 items-center text-nowrap justify-center gap-2 hover:bg-[#16a34a]/80 duration-300 cursor-pointer bg-[#16a34a] hover:bg-[#16a34a]-dark text-white font-semibold text-sm px-5 py-1.5 rounded-lg transition-all shadow-sm hover:shadow w-full sm:w-auto">
+          <button onClick={exportCSV} className="flex max-sm:min-w-10 items-center text-nowrap justify-center gap-2 hover:bg-[#16a34a]/80 duration-300 cursor-pointer bg-[#16a34a] hover:bg-[#16a34a]-dark text-white font-semibold text-sm px-5 py-1.5 rounded-lg transition-all shadow-sm hover:shadow w-full sm:w-auto">
             <span className="material-symbols-outlined text-xl!">download</span>
             Export CSV
           </button>
@@ -160,9 +196,15 @@ const SellerProductsManagemnt = () => {
                 <TableRow key={product._id}>
                   <TableCell className="px-6 py-4 min-w-50">
                     <div className="flex items-center gap-2">
-                      <img className="w-10 h-10 rounded object-contain bg-gray-100" src={product.images[0]} alt={product.title} />
+                      <img
+                        className="w-10 h-10 rounded object-contain bg-gray-100"
+                        src={product.images[0]}
+                        alt={product.title}
+                      />
                       <div>
-                        <div className="font-semibold overflow-ellipsis line-clamp-2 max-w-30">{product.title}</div>
+                        <div className="font-semibold overflow-ellipsis line-clamp-2 max-w-30">
+                          {product.title}
+                        </div>
                         <div className="text-xs text-gray-500 max-w-30 overflow-ellipsis line-clamp-2">
                           SKU: {product.sku}
                         </div>

@@ -3,7 +3,6 @@ import InputField from "@/components/common/InputField";
 import api from "@/utils/axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import ImageUploader from "./ImageUploader";
 
@@ -14,7 +13,7 @@ const AddNewProduct = () => {
   const [images, setImages] = useState([]);
   const [product, setProduct] = useState({
     title: "",
-    categoryName: "Fruits",
+    categoryName: "fruits",
     price: "",
     discountPrice: "",
     weight: "",
@@ -87,7 +86,7 @@ const AddNewProduct = () => {
     if (!isUpdate) {
       setProduct({
         title: "",
-        categoryName: "Fruits",
+        categoryName: "fruits",
         price: "",
         discountPrice: "",
         weight: "",
