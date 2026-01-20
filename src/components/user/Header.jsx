@@ -4,9 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 import Cta from "../common/Cta";
+import { useSelector } from "react-redux";
+import Profile from "./Profile";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const { user, isAuth } = useSelector((state) => state.auth);
   const toggleMenu = () => {
     const newState = !isOpen;
     setIsOpen(newState);
@@ -23,10 +27,10 @@ const Header = () => {
   };
 
   return (
-    <div className="py-[18px]">
-      <div className="container xl:max-w-[1140px] mx-auto xl:px-0 px-5 w-full">
+    <div className="py-4.5">
+      <div className="container xl:max-w-285 mx-auto xl:px-0 px-5 w-full">
         <div className="flex items-center justify-between">
-          <Link href="/" className="relative z-[99]">
+          <Link href="/" className="relative z-99">
             <Image
               src="/assets/images/svg/logo.svg"
               alt="Logo"
@@ -50,7 +54,7 @@ const Header = () => {
                     <Link
                       onClick={() => setIsOpen(false)}
                       href={obj.url}
-                      className="text-off-black font-inter font-medium leading-[100%] capitalize text-base relative after:absolute after:w-full after:bg-green after:h-px after:scale-x-0 after:-bottom-1 after:left-0 hover:after:scale-100 active:after:scale-100 focus:after:scale-100 after:transition-all after:duration-300 hover:text-green active:text-green focus:text-green duration-300 transition-all inline-block"
+                      className="text-off-black font-inter font-medium leading-100 capitalize text-base relative after:absolute after:w-full after:bg-green after:h-px after:scale-x-0 after:-bottom-1 after:left-0 hover:after:scale-100 active:after:scale-100 focus:after:scale-100 after:transition-all after:duration-300 hover:text-green active:text-green focus:text-green duration-300 transition-all inline-block"
                     >
                       {obj.title}
                     </Link>
@@ -58,42 +62,68 @@ const Header = () => {
                 );
               })}
             </ul>
-            <Link href="/cart"
-              onClick={() => setIsOpen(false)}
-              className="sm:hidden mt-6 max-w-43.25 h-11.5! w-full text-center bg-transparent border-black! text-black! border shadow-none hover:border-green! hover:text-green! active:border-green! focus:text-green! focus:border-green! active:text-green! p-4 font-inter font-medium md:text-lg text-base  leading-100 rounded-[50px]  md:h-13.5 flex items-center justify-center cursor-pointer hover:bg-transparent active:bg-transparent focus:bg-transparent  transition-all duration-300"
-            >
-              Order Delivery
-            </Link>
+            {!isAuth && (
+              <Cta
+                href="/auth"
+                onClick={() => setIsOpen(false)}
+                className="sm:hidden mt-6  max-w-45"
+              >
+                Login
+              </Cta>
+            )}
           </div>
-          <Link href="/cart"
-            onClick={() => setIsOpen(false)}
-            className="max-sm:hidden max-w-[173px] h-11.5! w-full text-center bg-transparent !border-black !text-black border shadow-none hover:!border-green hover:!text-green active:!border-green focus:!text-green focus:!border-green active:!text-green p-4 font-inter font-medium md:text-lg text-base leading-[100%] rounded-[50px] md:h-[54px] flex items-center justify-center cursor-pointer hover:bg-transparent active:bg-transparent focus:bg-transparent transition-all duration-300"
-          >
-            Order Delivery
-          </Link>
-          <button
-            aria-label="menu"
-            onClick={toggleMenu}
-            className="flex flex-col items-center justify-center w-10 h-10 outline-none md:hidden relative z-50"
-          >
-            <span
-              className={`block w-6 h-0.5 bg-green transition-transform duration-300 ${
-                isOpen ? "rotate-45 translate-y-1.5" : ""
-              }`}
-            ></span>
-            <span
-              className={`block w-6 h-0.5 bg-green my-1 transition-opacity duration-300 ${
-                isOpen ? "opacity-0" : ""
-              }`}
-            ></span>
-            <span
-              className={`block w-6 h-0.5 bg-green transition-transform duration-300 ${
-                isOpen ? "-rotate-45 -translate-y-1.5" : ""
-              }`}
-            ></span>
-          </button>
+          <div className="flex items-center gap-3">
+            {isAuth ? (
+              <div
+                onClick={() => setIsProfileOpen(true)}
+                className="flex items-center gap-2 cursor-pointer"
+              >
+                {user?.image ? (
+                  <img
+                    src={user.image}
+                    alt={user.name}
+                    className="w-8 h-8 rounded-full object-cover"
+                  />
+                ) : (
+                  <div className="w-10 h-10 rounded-full bg-gray-50 text-green-700 border-green-600 border flex items-center justify-center font-semibold uppercase">
+                   <span className="material-symbols-outlined text-3xl!"> person</span>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Cta
+                href="/auth"
+                onClick={() => setIsOpen(false)}
+                className="max-sm:hidden max-w-35 min-w-30"
+              >
+                Login
+              </Cta>
+            )}
+            <button
+              aria-label="menu"
+              onClick={toggleMenu}
+              className="flex flex-col items-center justify-center w-10 h-10 outline-none md:hidden relative z-50"
+            >
+              <span
+                className={`block w-6 h-0.5 bg-green transition-transform duration-300 ${
+                  isOpen ? "rotate-45 translate-y-1.5" : ""
+                }`}
+              ></span>
+              <span
+                className={`block w-6 h-0.5 bg-green my-1 transition-opacity duration-300 ${
+                  isOpen ? "opacity-0" : ""
+                }`}
+              ></span>
+              <span
+                className={`block w-6 h-0.5 bg-green transition-transform duration-300 ${
+                  isOpen ? "-rotate-45 -translate-y-1.5" : ""
+                }`}
+              ></span>
+            </button>
+          </div>
         </div>
       </div>
+      <Profile isOpen={isProfileOpen} onClose={() => setIsProfileOpen(false)} />
     </div>
   );
 };

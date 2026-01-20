@@ -1,6 +1,5 @@
 "use client";
 
-import Preloader from "@/components/common/Preloader";
 import AboutUs from "@/components/user/AboutUs";
 import AppStore from "@/components/user/AppStore";
 import Cards from "@/components/user/Cards";

@@ -1,6 +1,7 @@
 "use client";
 import SideBar from "@/components/admin/common/SideBar";
 import TopBar from "@/components/admin/common/TopBar";
+import ProtectedRoute from "@/components/common/ProtectedRoute";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -12,10 +13,10 @@ export default function AdminLayout({ children }) {
     "/admin/seller-order-management": "Orders Mamagements",
     "/admin/seller-products-management": "Products Mamagements",
     "/admin/payments-and-Commissions": "Payments And Commissions",
-    "/admin/returns-management":"Returns Overview",
-    "/admin/disputes":"disputes",
-    "/admin/settings":"settings",
-    "/admin/help-and-support":"help and support",
+    "/admin/returns-management": "Returns Overview",
+    "/admin/disputes": "disputes",
+    "/admin/settings": "settings",
+    "/admin/help-and-support": "help and support",
   };
   useEffect(() => {
     if (sidebarOpen) {
@@ -30,20 +31,20 @@ export default function AdminLayout({ children }) {
     };
   }, [sidebarOpen]);
   return (
-    <div className="max-w-500 mx-auto h-screen overflow-hidden scrollbar_hidden">
-      <div className="flex">
-        <SideBar open={sidebarOpen} setOpen={setSidebarOpen} />
+    <ProtectedRoute>
+      <div className="max-w-500 mx-auto h-screen overflow-hidden scrollbar_hidden">
+        <div className="flex">
+          <SideBar open={sidebarOpen} setOpen={setSidebarOpen} />
 
-        <div className="w-full h-screen overflow-y-auto">
-          <TopBar
-            title={titleMap[pathname] || "Admin Panel"}
-            onMenuClick={() => setSidebarOpen(true)}
-          />
-          <div className="overflow-y-auto h-auto">
-          {children}
+          <div className="w-full h-screen overflow-y-auto">
+            <TopBar
+              title={titleMap[pathname] || "Admin Panel"}
+              onMenuClick={() => setSidebarOpen(true)}
+            />
+            <div className="overflow-y-auto h-auto">{children}</div>
           </div>
         </div>
       </div>
-    </div>
+    </ProtectedRoute>
   );
 }

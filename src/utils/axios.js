@@ -1,6 +1,7 @@
 import axios from "axios";
+import { store } from "@/redux/store";
+import { logout } from "@/redux/slice/authSlice";
 import { toast } from "react-toastify";
-
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
   headers: {
@@ -23,37 +24,29 @@ api.interceptors.request.use(
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 /* ======================
    RESPONSE INTERCEPTOR
 ====================== */
-let isRedirecting = false; // 🔥 prevents multiple toasts
+let isLoggingOut = false;
 
 api.interceptors.response.use(
-  (response) => response,
+  (res) => res,
   (error) => {
     const status = error.response?.status;
 
-    if ((status === 401 || status === 403) && !isRedirecting) {
-      isRedirecting = true;
+    if ((status === 401 || status === 403) && !isLoggingOut) {
+      isLoggingOut = true;
 
-      toast.error(
-        status === 401
-          ? "Session expired. Please login again."
-          : "Admin access required"
-      );
-
+      toast.error("Session expired please login again!");
       localStorage.removeItem("token");
 
-      setTimeout(() => {
-        window.location.href = "/auth";
-      }, 1500);
+      store.dispatch(logout());
     }
-
     return Promise.reject(error);
-  }
+  },
 );
 
 export default api;
