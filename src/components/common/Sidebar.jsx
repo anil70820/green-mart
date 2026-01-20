@@ -22,6 +22,7 @@ export default function Sidebar({
   title = "Sidebar",
   position = "right",
   children,
+  header = true,
 }) {
   // Body scroll lock
   useEffect(() => {
@@ -50,19 +51,21 @@ export default function Sidebar({
         )}
       >
         {/* Header (fixed) */}
-        <div className="h-14 p-4 flex items-center justify-between border-b border-b-gray-200 bg-white shrink-0">
-          <h2 className="text-lg font-semibold text-[#111811]">{title}</h2>
-          <button
-            onClick={onClose}
-            className="rounded-full
+        {header === true && (
+          <div className="h-14 p-4 flex items-center justify-between border-b border-b-gray-200 bg-white shrink-0">
+            <h2 className="text-lg font-semibold text-[#111811]">{title}</h2>
+            <button
+              onClick={onClose}
+              className="rounded-full
         text-[#111811] hover:text-green-600 duration-300 cursor-pointer lg:hidden"
-          >
-            <span className="material-symbols-outlined">close</span>
-          </button>
-        </div>
+            >
+              <span className="material-symbols-outlined">close</span>
+            </button>
+          </div>
+        )}
 
         {/* Body (scrollable) */}
-        <div className="flex-1 overflow-y-auto p-4">{children}</div>
+        <div className="flex-1 overflow-y-auto py-4">{children}</div>
       </div>
     </>
   );

@@ -74,22 +74,33 @@ const Header = () => {
           </div>
           <div className="flex items-center gap-3">
             {isAuth ? (
-              <div
-                onClick={() => setIsProfileOpen(true)}
-                className="flex items-center gap-2 cursor-pointer"
-              >
-                {user?.image ? (
-                  <img
-                    src={user.image}
-                    alt={user.name}
-                    className="w-8 h-8 rounded-full object-cover"
-                  />
-                ) : (
-                  <div className="w-10 h-10 rounded-full bg-gray-50 text-green-700 border-green-600 border flex items-center justify-center font-semibold uppercase">
-                   <span className="material-symbols-outlined text-3xl!"> person</span>
-                  </div>
-                )}
-              </div>
+              user?.role === "admin" ? (
+                <Cta
+                  href="/admin/dashboard"
+                  className="sm:min-w-40"
+                >
+                  Dashboard
+                </Cta>
+              ) : (
+                <div
+                  onClick={() => setIsProfileOpen(true)}
+                  className="flex items-center gap-2 cursor-pointer"
+                >
+                  {user?.image ? (
+                    <img
+                      src={user.image}
+                      alt={user.name}
+                      className="w-8 h-8 rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-gray-50 text-green-700 border border-green-600 flex items-center justify-center">
+                      <span className="material-symbols-outlined text-[28px]">
+                        person
+                      </span>
+                    </div>
+                  )}
+                </div>
+              )
             ) : (
               <Cta
                 href="/auth"
@@ -99,6 +110,7 @@ const Header = () => {
                 Login
               </Cta>
             )}
+
             <button
               aria-label="menu"
               onClick={toggleMenu}
