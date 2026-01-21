@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 @import "tailwindcss";
-
+@variant dark (&:where(.dark, .dark *));
 @theme {
   --color-green: #057203;
   --color-light-green: #17750d;
@@ -131,12 +131,22 @@ button span.ml-4 {
   display: none !important;
 }
 
-button{
+button {
   cursor: pointer;
 }
 
-.btn-success { @apply px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-600/70 duration-300; }
-.btn-danger  { @apply px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-600/70 duration-300; }
-.btn-warning { @apply px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-500/70 duration-300; }
-.btn-primary { @apply px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-600/70 duration-300; }
-.btn-disabled{ @apply px-4 py-2 bg-gray-200 text-gray-500 rounded-md cursor-not-allowed; }
+.btn-success {
+  @apply px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-600/70 duration-300;
+}
+.btn-danger {
+  @apply px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-600/70 duration-300;
+}
+.btn-warning {
+  @apply px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-500/70 duration-300;
+}
+.btn-primary {
+  @apply px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-600/70 duration-300;
+}
+.btn-disabled {
+  @apply px-4 py-2 bg-gray-200 text-gray-500 rounded-md cursor-not-allowed;
+}

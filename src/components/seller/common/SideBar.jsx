@@ -37,13 +37,13 @@ const SideBar = ({ open, setOpen }) => {
       />
       <div
         className={`max-lg:fixed left-0 top-0 bottom-0 z-50 w-3/4 max-w-75
-        bg-white dark:bg-[#1a2e1a] shadow-xl transform transition-transform
+        bg-white dk:bg-[#1a2e1a] shadow-xl transform transition-transform
         overflow-y-auto h-screen
         ${open ? "translate-x-0" : "-translate-x-full lg:translate-0"}`}
       >
         <div className="flex flex-col h-full p-4">
           {/* Header */}
-          <div className="flex items-center justify-between pb-6 border-b border-gray-100 dark:border-gray-800 mb-4">
+          <div className="flex items-center justify-between pb-6 border-b border-gray-100 dk:border-gray-800 mb-4">
             <Link href="/" className="relative z-[99]">
               <Image
                 src="/assets/images/svg/logo.svg"
@@ -78,7 +78,7 @@ const SideBar = ({ open, setOpen }) => {
                     ${
                       isActive
                         ? "bg-green-500/20 text-[#0a3d0a] font-bold"
-                        : "hover:bg-gray-50 dark:hover:bg-white/5 text-[#111811] dark:text-[#e0e6e0]"
+                        : "hover:bg-gray-50 dk:hover:bg-white/5 text-[#111811] dk:text-[#e0e6e0]"
                     }`}
                   >
                     <span className="material-symbols-outlined">
@@ -90,14 +90,14 @@ const SideBar = ({ open, setOpen }) => {
               );
             })}
 
-            <div className="my-2 border-t border-gray-100 dark:border-gray-800" />
+            <div className="my-2 border-t border-gray-100 dk:border-gray-800" />
 
             {bottomMenu.map((item) => (
               <li key={item.name}>
                 <Link
                   href={item.href}
                   onClick={() => setOpen(false)}
-                  className="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-gray-50 dark:hover:bg-white/5 text-[#525c52] dark:text-[#a0baa0] text-sm"
+                  className="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-gray-50 dk:hover:bg-white/5 text-[#525c52] dk:text-[#a0baa0] text-sm"
                 >
                   <span className="material-symbols-outlined text-[20px]">
                     {item.icon}

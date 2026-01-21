@@ -9,7 +9,7 @@ const ImageUploader = ({ images, setImages }) => {
 
   const addImages = (files) => {
     const valid = Array.from(files).filter((file) =>
-      ["image/jpeg", "image/png", "image/webp"].includes(file.type)
+      ["image/jpeg", "image/png", "image/webp"].includes(file.type),
     );
 
     if (images.length + valid.length > MAX_IMAGES) {
@@ -34,8 +34,8 @@ const ImageUploader = ({ images, setImages }) => {
         addImages(e.dataTransfer.files);
       }}
       className="flex flex-col items-center justify-center gap-4 rounded-2xl
-      border-2 border-dashed border-[#dbe6db] dark:border-[#2a402a]
-      bg-[#ffffff] dark:bg-[#162b16] sm:px-6 sm:py-10 p-5"
+      border-2 border-dashed border-[#dbe6db] dk:border-[#2a402a]
+      bg-[#ffffff] dk:bg-[#162b16] sm:px-6 sm:py-10 p-5"
     >
       <input
         ref={inputRef}
@@ -50,7 +50,7 @@ const ImageUploader = ({ images, setImages }) => {
         add_photo_alternate
       </span>
 
-      <p className="text-sm font-bold text-[#111811] dark:text-[#e8f5e8]">
+      <p className="text-sm font-bold text-[#111811] dk:text-[#e8f5e8]">
         Upload Photos ({images.length}/5)
       </p>
 

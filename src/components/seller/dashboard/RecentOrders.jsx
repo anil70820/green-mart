@@ -32,19 +32,19 @@ const statusConfig = {
     label: "Pending",
     icon: "package_2",
     badge:
-      "bg-orange-50 text-orange-700 ring-orange-600/20 dark:bg-orange-900/20 dark:text-orange-300 dark:ring-orange-500/20",
+      "bg-orange-50 text-orange-700 ring-orange-600/20 dk:bg-orange-900/20 dk:text-orange-300 dk:ring-orange-500/20",
   },
   shipped: {
     label: "Shipped",
     icon: "local_shipping",
     badge:
-      "bg-green-50 text-green-700 ring-green-600/20 dark:bg-green-900/20 dark:text-green-300 dark:ring-green-500/20",
+      "bg-green-50 text-green-700 ring-green-600/20 dk:bg-green-900/20 dk:text-green-300 dk:ring-green-500/20",
   },
   delivered: {
     label: "Delivered",
     icon: "check_circle",
     badge:
-      "bg-gray-50 text-gray-600 ring-gray-500/10 dark:bg-gray-400/10 dark:text-gray-400 dark:ring-gray-400/20",
+      "bg-gray-50 text-gray-600 ring-gray-500/10 dk:bg-gray-400/10 dk:text-gray-400 dk:ring-gray-400/20",
   },
 };
 
@@ -53,12 +53,12 @@ const RecentOrders = () => {
     <div>
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
-        <h3 className="font-bold text-lg text-[#111811] dark:text-[#e0e6e0]">
+        <h3 className="font-bold text-lg text-[#111811] dk:text-[#e0e6e0]">
           Recent Orders
         </h3>
         <a
           href="#"
-          className="text-sm font-semibold text-[#0a3d0a] dark:text-[#13ec13]"
+          className="text-sm font-semibold text-[#0a3d0a] dk:text-[#13ec13]"
         >
           See All
         </a>
@@ -72,29 +72,29 @@ const RecentOrders = () => {
           return (
             <div
               key={order.id}
-              className={`flex items-center justify-between bg-white dark:bg-[#1a2e1a] p-4 rounded-xl border border-gray-100 dark:border-gray-800 shadow-sm ${
+              className={`flex items-center justify-between bg-white dk:bg-[#1a2e1a] p-4 rounded-xl border border-gray-100 dk:border-gray-800 shadow-sm ${
                 order.status === "delivered" ? "opacity-70" : ""
               }`}
             >
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-[#525c52] dark:text-[#a0baa0]">
+                <div className="w-10 h-10 rounded-lg bg-gray-100 dk:bg-gray-800 flex items-center justify-center text-[#525c52] dk:text-[#a0baa0]">
                   <span className="material-symbols-outlined text-[20px]">
                     {config.icon}
                   </span>
                 </div>
 
                 <div>
-                  <p className="font-bold text-sm text-[#111811] dark:text-[#e0e6e0]">
+                  <p className="font-bold text-sm text-[#111811] dk:text-[#e0e6e0]">
                     Order #{order.id}
                   </p>
-                  <p className="text-xs text-[#525c52] dark:text-[#a0baa0]">
+                  <p className="text-xs text-[#525c52] dk:text-[#a0baa0]">
                     {order.items} items • {order.time}
                   </p>
                 </div>
               </div>
 
               <div className="flex flex-col items-end">
-                <p className="font-bold text-sm text-[#111811] dark:text-[#e0e6e0]">
+                <p className="font-bold text-sm text-[#111811] dk:text-[#e0e6e0]">
                   {order.amount}
                 </p>
 

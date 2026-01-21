@@ -39,9 +39,9 @@ const RecentActivities = () => {
         </div>
       </div>
 
-      <div className="flex-1 overflow-auto rounded-xl bg-white dark:bg-[#1a331a] ring-1 ring-gray-100 dark:ring-gray-800">
+      <div className="flex-1 overflow-auto rounded-xl bg-white ring-1 ring-gray-100">
         <table className="min-w-full">
-          <thead className="sticky top-0 bg-gray-50 dark:bg-gray-800 z-10">
+          <thead className="sticky top-0 bg-gray-50 z-10">
             <tr className="text-xs text-[#618961]">
               <th className="p-3 ps-6 flex items-center justify-start min-w-18 text-nowrap">
                 Sr. No.
@@ -58,10 +58,10 @@ const RecentActivities = () => {
             {PRODUCTS.map((p, index) => (
               <tr
                 key={p.id}
-                className="hover:bg-gray-50 dark:hover:bg-gray-800"
+                className="hover:bg-gray-50"
               >
                 <td className="p-3 min-w-16 font-medium ps-6">{index + 1}.</td>
-                <td className="font-medium text-[#111811] dark:text-[#e0e6e0] min-w-50">
+                <td className="font-medium text-[#111811] min-w-50">
                   {p.name}
                 </td>
                 <td className="text-[#618961] min-w-40">{p.sku}</td>

@@ -11,13 +11,13 @@ const ProductsListSm = ({ product, onDelete }) => {
   return (
     <div
       className={`lg:hidden group relative flex flex-col gap-3 rounded-xl
-        bg-white dark:bg-[#1a331a] p-3 shadow-sm ring-1 ring-gray-100 dark:ring-gray-800
+        bg-white dk:bg-[#1a331a] p-3 shadow-sm ring-1 ring-gray-100 dk:ring-gray-800
         transition-all hover:scale-[0.99]
         ${isInactive ? "opacity-75" : ""}`}
     >
       <div className="flex gap-3">
         {/* Image */}
-        <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800">
+        <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-lg bg-gray-100 dk:bg-gray-800">
           <img
             className="h-full w-full object-contain"
             src={product.images?.[0]}
@@ -40,7 +40,7 @@ const ProductsListSm = ({ product, onDelete }) => {
                 className={`font-bold line-clamp-1 ${
                   isInactive
                     ? "text-gray-500"
-                    : "text-[#111811] dark:text-[#e0e6e0]"
+                    : "text-[#111811] dk:text-[#e0e6e0]"
                 }`}
               >
                 {product.title}
@@ -61,7 +61,7 @@ const ProductsListSm = ({ product, onDelete }) => {
                     dispatch(setSelectedProduct(product));
 
                     router.push(
-                      `/seller/products/add-new-product?productId=${product._id}`
+                      `/seller/products/add-new-product?productId=${product._id}`,
                     );
                   }}
                   className="px-5 py-2 text-left hover:bg-black/5 min-w-35"
@@ -80,21 +80,21 @@ const ProductsListSm = ({ product, onDelete }) => {
                 </button>
               </Dropdown>
             </div>
-            <p className="text-xs text-[#618961] dark:text-[#8fab8f]">
+            <p className="text-xs text-[#618961] dk:text-[#8fab8f]">
               {product.categoryName}
             </p>
           </div>
 
           <div className="flex items-center justify-between">
             <div className="flex gap-2 items-center">
-              <span className="text-sm font-medium text-[#618961] dark:text-[#8fab8f]">
+              <span className="text-sm font-medium text-[#618961] dk:text-[#8fab8f]">
                 Price:
               </span>
               <div
                 className={`font-semibold ${
                   isInactive
                     ? "text-gray-500"
-                    : "text-[#111811] dark:text-[#e0e6e0]"
+                    : "text-[#111811] dk:text-[#e0e6e0]"
                 }`}
               >
                 ${product.price}
@@ -108,18 +108,18 @@ const ProductsListSm = ({ product, onDelete }) => {
       product.stock > 10
         ? "bg-green-100 text-green-700"
         : product.stock > 0
-        ? "bg-orange-100 text-orange-700"
-        : "bg-red-100 text-red-700"
+          ? "bg-orange-100 text-orange-700"
+          : "bg-red-100 text-red-700"
     }`}
               >
                 {product.stock > 10
                   ? "active"
                   : product.stock > 0
-                  ? "low stock"
-                  : "rejected"}
+                    ? "low stock"
+                    : "rejected"}
               </span>
 
-              <span className="mt-1 text-xs font-medium text-[#618961] dark:text-[#8fab8f]">
+              <span className="mt-1 text-xs font-medium text-[#618961] dk:text-[#8fab8f]">
                 {product.stock} in stock
               </span>
             </div>

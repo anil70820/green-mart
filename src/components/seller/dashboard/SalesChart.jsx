@@ -47,22 +47,22 @@ const SalesChart = () => {
   const [activeTab, setActiveTab] = useState("daily");
   return (
     <div className="w-full">
-      <div className="bg-surface-light dark:bg-surface-dark p-5 rounded-xl border border-gray-100 dark:border-gray-800 shadow-sm scrollbar_hidden">
+      <div className="bg-surface-light dk:bg-surface-dark p-5 rounded-xl border border-gray-100 dk:border-gray-800 shadow-sm scrollbar_hidden">
         {/* HEADER */}
         <div className="flex items-center justify-between mb-6 gap-4  flex-wrap">
-          <h3 className="font-bold text-lg text-text-main-light dark:text-text-main-dark">
+          <h3 className="font-bold text-lg text-text-main-light dk:text-text-main-dark">
             Sales Overview
           </h3>
 
-          <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p- min-w-55">
+          <div className="flex bg-gray-100 dk:bg-gray-800 rounded-lg p- min-w-55">
             {["daily", "weekly", "monthly"].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 className={`px-3 py-1 text-xs rounded transition w-1/3 text-center ${
                   activeTab === tab
-                    ? "font-bold bg-white dark:bg-gray-700 text-text-main-light dark:text-text-main-dark shadow-sm"
-                    : "font-medium text-text-sub-light dark:text-text-sub-dark"
+                    ? "font-bold bg-white dk:bg-gray-700 text-text-main-light dk:text-text-main-dark shadow-sm"
+                    : "font-medium text-text-sub-light dk:text-text-sub-dark"
                 }`}
               >
                 {tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -102,12 +102,11 @@ const SalesChart = () => {
                   radius={[6, 6, 0, 0]}
                   fill="#bbf7d0"
                   isAnimationActive
-                  
                 >
                   {/* Active (Highest) Bar Highlight */}
                   {chartData[activeTab].map((entry, index) => {
                     const maxValue = Math.max(
-                      ...chartData[activeTab].map((d) => d.value)
+                      ...chartData[activeTab].map((d) => d.value),
                     );
                     return (
                       <cell

@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import ImageUploader from "./ImageUploader";
 
 const AddNewProduct = () => {
-    const router = useRouter();
+  const router = useRouter();
   const searchParams = useSearchParams();
   const productId = searchParams.get("productId");
   const [images, setImages] = useState([]);
@@ -47,7 +47,7 @@ const AddNewProduct = () => {
           p.images.map((img) => ({
             file: null,
             preview: img,
-          }))
+          })),
         );
 
         setIsUpdate(true);
@@ -64,65 +64,64 @@ const AddNewProduct = () => {
     setProduct((prev) => ({ ...prev, [name]: value }));
   };
 
- const handlePublish = async () => {
-  const formData = new FormData();
-  Object.entries(product).forEach(([k, v]) => formData.append(k, v));
-  images.forEach((img) => img.file && formData.append("image", img.file));
+  const handlePublish = async () => {
+    const formData = new FormData();
+    Object.entries(product).forEach(([k, v]) => formData.append(k, v));
+    images.forEach((img) => img.file && formData.append("image", img.file));
 
-  try {
-    setLoading(true);
+    try {
+      setLoading(true);
 
-    const response = isUpdate
-      ? await api.put(`/seller/update-product/${productId}`, formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        })
-      : await api.post("/seller/add-product", formData, {
-          headers: { "Content-Type": "multipart/form-data" },
+      const response = isUpdate
+        ? await api.put(`/seller/update-product/${productId}`, formData, {
+            headers: { "Content-Type": "multipart/form-data" },
+          })
+        : await api.post("/seller/add-product", formData, {
+            headers: { "Content-Type": "multipart/form-data" },
+          });
+
+      toast.success(response.data.message);
+
+      // ✅ ADD PRODUCT → form reset
+      if (!isUpdate) {
+        setProduct({
+          title: "",
+          categoryName: "fruits",
+          price: "",
+          discountPrice: "",
+          weight: "",
+          stock: "",
+          rating: "",
+          description: "",
         });
+        setImages([]);
+      }
 
-    toast.success(response.data.message);
-
-    // ✅ ADD PRODUCT → form reset
-    if (!isUpdate) {
-      setProduct({
-        title: "",
-        categoryName: "fruits",
-        price: "",
-        discountPrice: "",
-        weight: "",
-        stock: "",
-        rating: "",
-        description: "",
-      });
-      setImages([]);
+      // ✅ UPDATE PRODUCT → redirect
+      if (isUpdate) {
+        router.push("/seller/products");
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
     }
-
-    // ✅ UPDATE PRODUCT → redirect
-    if (isUpdate) {
-      router.push("/seller/products");
-    }
-  } catch (err) {
-    toast.error(err.response?.data?.message || "Something went wrong");
-  } finally {
-    setLoading(false);
-  }
-};
-
+  };
 
   return (
-    <main className="p-6 bg-[#f6f8f6] dark:bg-[#102210] min-h-[calc(100vh-73px)]">
+    <main className="p-6 bg-[#f6f8f6] dk:bg-[#102210] min-h-[calc(100vh-73px)]">
       <div className="grid md:grid-cols-2 gap-6">
         {/* Images */}
-        <section className="rounded-2xl bg-[#ffffff] dark:bg-[#162b16] p-5">
-          <h2 className="text-lg font-bold text-[#111811] dark:text-[#e8f5e8] mb-4">
+        <section className="rounded-2xl bg-[#ffffff] dk:bg-[#162b16] p-5">
+          <h2 className="text-lg font-bold text-[#111811] dk:text-[#e8f5e8] mb-4">
             Product Images
           </h2>
           <ImageUploader images={images} setImages={setImages} />
         </section>
 
         {/* Basic Details */}
-        <section className="rounded-2xl bg-[#ffffff] dark:bg-[#162b16] p-5 space-y-4">
-          <h2 className="text-lg font-bold text-[#111811] dark:text-[#e8f5e8]">
+        <section className="rounded-2xl bg-[#ffffff] dk:bg-[#162b16] p-5 space-y-4">
+          <h2 className="text-lg font-bold text-[#111811] dk:text-[#e8f5e8]">
             Basic Details
           </h2>
           <InputField
@@ -136,7 +135,7 @@ const AddNewProduct = () => {
               name="categoryName"
               value={product.categoryName}
               onChange={handleChange}
-              className="h-12 w-full rounded-xl bg-[#f0f4f0] dark:bg-[#1c331c] px-4"
+              className="h-12 w-full rounded-xl bg-[#f0f4f0] dk:bg-[#1c331c] px-4"
             >
               <option>Fruits</option>
               <option>Vegetables</option>
@@ -152,8 +151,8 @@ const AddNewProduct = () => {
         </section>
 
         {/* Pricing & Stock */}
-        <section className="rounded-2xl bg-[#ffffff] dark:bg-[#162b16] p-5 space-y-4">
-          <h2 className="text-lg font-bold text-[#111811] dark:text-[#e8f5e8]">
+        <section className="rounded-2xl bg-[#ffffff] dk:bg-[#162b16] p-5 space-y-4">
+          <h2 className="text-lg font-bold text-[#111811] dk:text-[#e8f5e8]">
             Pricing & Stock
           </h2>
           <InputField
@@ -187,8 +186,8 @@ const AddNewProduct = () => {
         </section>
 
         {/* Description */}
-        <section className="flex flex-col gap-4 rounded-2xl bg-[#ffffff] dark:bg-[#162b16] p-5 shadow-sm ring-1 ring-black/5 dark:ring-white/5">
-          <h2 className="text-lg font-bold text-[#111811] dark:text-[#e8f5e8]">
+        <section className="flex flex-col gap-4 rounded-2xl bg-[#ffffff] dk:bg-[#162b16] p-5 shadow-sm ring-1 ring-black/5 dk:ring-white/5">
+          <h2 className="text-lg font-bold text-[#111811] dk:text-[#e8f5e8]">
             Description
           </h2>
           <InputField
@@ -201,9 +200,9 @@ const AddNewProduct = () => {
         </section>
 
         {/* Buttons */}
-        <section className="rounded-2xl bg-[#ffffff] dark:bg-[#162b16] p-5 grid sm:grid-cols-2 gap-4 sm:min-h-50 min-h-20">
+        <section className="rounded-2xl bg-[#ffffff] dk:bg-[#162b16] p-5 grid sm:grid-cols-2 gap-4 sm:min-h-50 min-h-20">
           <button
-            className="rounded-xl border border-black/10 dark:border-white/10 py-3 h-12 cursor-pointer"
+            className="rounded-xl border border-black/10 dk:border-white/10 py-3 h-12 cursor-pointer"
             onClick={() => alert("Draft feature not implemented yet")}
           >
             Save Draft
@@ -218,8 +217,8 @@ const AddNewProduct = () => {
                 ? "Updating..."
                 : "Publishing..."
               : isUpdate
-              ? "Update Product"
-              : "Publish"}
+                ? "Update Product"
+                : "Publish"}
           </button>
         </section>
       </div>

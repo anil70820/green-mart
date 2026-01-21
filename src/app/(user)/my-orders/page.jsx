@@ -58,8 +58,8 @@ export default function OrdersPage() {
       : orders.filter((o) => o.status === activeFilter);
 
   return (
-    <main className="min-h-screen bg-[#F5F7FA] py-10">
-      <div className="max-w-5xl mx-auto px-4">
+    <div className="bg-[#F5F7FA] py-10">
+      <div className="xl:max-w-285 xl:px-0 px-5 mx-auto container">
         {/* Header */}
        <div className="flex items-center justify-between mb-6">
           <div>
@@ -175,6 +175,6 @@ export default function OrdersPage() {
           </div>
         )}
       </div>
-    </main>
+    </div>
   );
 }

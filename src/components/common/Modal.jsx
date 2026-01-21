@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
 const Modal = ({ open, onClose, children, width = "max-w-md" }) => {
-   const [mounted, setMounted] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -20,7 +20,7 @@ const Modal = ({ open, onClose, children, width = "max-w-md" }) => {
     return () => document.removeEventListener("keydown", handleEsc);
   }, [open, onClose]);
 
-  if (!mounted ||!open) return null;
+  if (!mounted || !open) return null;
 
   return createPortal(
     <div className={`fixed inset-0 z-50 flex items-center justify-center `}>
@@ -33,14 +33,19 @@ const Modal = ({ open, onClose, children, width = "max-w-md" }) => {
       {/* Modal */}
       <div
         className={`relative w-full ${width} mx-4 rounded-2xl duration-300
-        bg-white dark:bg-[#162b16]
-        shadow-xl ring-1 ring-black/10 dark:ring-white/10 p-5 md:p-8`}
+        bg-white dk:bg-[#162b16]
+        shadow-xl ring-1 ring-black/10 dk:ring-white/10 p-5 md:p-8`}
       >
-        <span onClick={onClose} className="material-symbols-outlined absolute top-3 right-3 cursor-pointer hover:text-green-600 duration-300">close</span>
+        <span
+          onClick={onClose}
+          className="material-symbols-outlined absolute top-3 right-3 cursor-pointer hover:text-green-600 duration-300"
+        >
+          close
+        </span>
         {children}
       </div>
     </div>,
-    document.body
+    document.body,
   );
 };
 

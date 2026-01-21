@@ -156,13 +156,13 @@ const Orders = () => {
         <div className="flex-1  p-4 max-sm:hidden">
           <div className="rounded-xl bg-white shadow ring-1 ring-black/5 overflow-auto">
             <table className="min-w-full">
-              <thead className="bg-gray-50 dark:bg-surface-dark sticky top-0 z-10">
+              <thead className="bg-gray-50 dk:bg-surface-dark sticky top-0 z-10">
                 <tr>
-                  <th className="p-3 pl-4 py-3.5 text-left text-base font-semibold text-gray-900 dark:text-white min-w-20">
+                  <th className="p-3 pl-4 py-3.5 text-left text-base font-semibold text-gray-900 dk:text-white min-w-20">
                     Sr. No.
                   </th>
                   <th
-                    className="py-3.5 text-left text-base font-semibold text-gray-900 dark:text-white min-w-30"
+                    className="py-3.5 text-left text-base font-semibold text-gray-900 dk:text-white min-w-30"
                     scope="col"
                   >
                     <div className="group inline-flex cursor-pointer">
@@ -170,7 +170,7 @@ const Orders = () => {
                     </div>
                   </th>
                   <th
-                    className="py-3.5 text-left text-base font-semibold text-gray-900 dark:text-white min-w-30"
+                    className="py-3.5 text-left text-base font-semibold text-gray-900 dk:text-white min-w-30"
                     scope="col"
                   >
                     <div className="group inline-flex cursor-pointer">
@@ -178,7 +178,7 @@ const Orders = () => {
                     </div>
                   </th>
                   <th
-                    className="py-3.5 text-left text-base font-semibold text-gray-900 dark:text-white min-w-30"
+                    className="py-3.5 text-left text-base font-semibold text-gray-900 dk:text-white min-w-30"
                     scope="col"
                   >
                     <div className="group inline-flex cursor-pointer">
@@ -186,13 +186,13 @@ const Orders = () => {
                     </div>
                   </th>
                   <th
-                    className="py-3.5 text-left text-base font-semibold text-gray-900 dark:text-white min-w-30"
+                    className="py-3.5 text-left text-base font-semibold text-gray-900 dk:text-white min-w-30"
                     scope="col"
                   >
                     Total
                   </th>
                   <th
-                    className="py-3.5 text-left text-base font-semibold text-gray-900 dark:text-white min-w-20"
+                    className="py-3.5 text-left text-base font-semibold text-gray-900 dk:text-white min-w-20"
                     scope="col"
                   >
                     <span>Actions</span>
@@ -200,7 +200,7 @@ const Orders = () => {
                 </tr>
               </thead>
 
-              <tbody className="divide-y divide-gray-100 dark:divide-gray-800 bg-surface-light dark:bg-surface-dark">
+              <tbody className="divide-y divide-gray-100 dk:divide-gray-800 bg-surface-light dk:bg-surface-dark">
                 {filteredOrders.map((order, index) => (
                   <tr
                     key={order.id}
@@ -230,7 +230,7 @@ const Orders = () => {
                           setSelectedOrder(order);
                           setIsSidebarOpen(true);
                         }}
-                        className="text-green-500 hover:text-green-600/50 dark:hover:text-green-400 cursor-pointer"
+                        className="text-green-500 hover:text-green-600/50 dk:hover:text-green-400 cursor-pointer"
                       >
                         View
                       </button>

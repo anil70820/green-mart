@@ -81,7 +81,7 @@ const ProductsList = () => {
     <div className="px-5 mt-2 pt-3 pb-5 overflow-y-auto h-[calc(100vh-90px)]">
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* ===== TOP FILTER BAR ===== */}
-        <div className="dark:bg-[#102210] pb-4">
+        <div className="dk:bg-[#102210] pb-4">
           <div className="flex gap-4 mb-3">
             {/* Search */}
             <div className="relative flex-1">
@@ -92,8 +92,8 @@ const ProductsList = () => {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search by name, category..."
-                className="w-full rounded-xl bg-white dark:bg-[#1a331a] py-2.5 pl-10 pr-4
-              text-sm text-[#111811] dark:text-[#e0e6e0]
+                className="w-full rounded-xl bg-white dk:bg-[#1a331a] py-2.5 pl-10 pr-4
+              text-sm text-[#111811] dk:text-[#e0e6e0]
               border border-gray-200 focus:border-[#13ec13] outline-none"
               />
             </div>
@@ -115,7 +115,7 @@ const ProductsList = () => {
               ${
                 tab === t.key
                   ? "bg-[#13ec13] text-white"
-                  : "bg-white dark:bg-[#1a331a] text-[#618961] border border-gray-200 dark:border-gray-700"
+                  : "bg-white dk:bg-[#1a331a] text-[#618961] border border-gray-200 dk:border-gray-700"
               }`}
               >
                 {t.label}

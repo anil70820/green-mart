@@ -5,7 +5,7 @@ const QuickActions = () => {
   return (
     <div>
       <div className="lg:col-span-3 xl:col-span-4 mb-4">
-        <h3 className="font-bold text-lg text-text-main-light dark:text-text-main-dark mb-4">
+        <h3 className="font-bold text-lg text-text-main-light dk:text-text-main-dark mb-4">
           Quick Actions
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -14,7 +14,7 @@ const QuickActions = () => {
 
             <span className="font-bold text-lg">Add New Product</span>
           </button>
-          <button className="flex items-center justify-center gap-3 p-6 rounded-xl bg-surface-light dark:bg-surface-dark border hover:scale-95 border-gray-200 dark:border-gray-700 text-text-main-light dark:text-text-main-dark shadow-sm active:scale-95 transition-transform cursor-pointer">
+          <button className="flex items-center justify-center gap-3 p-6 rounded-xl bg-surface-light dk:bg-surface-dark border hover:scale-95 border-gray-200 dk:border-gray-700 text-text-main-light dk:text-text-main-dark shadow-sm active:scale-95 transition-transform cursor-pointer">
             <span className="material-symbols-outlined text-3xl">list_alt</span>
             <span className="font-bold text-lg">View All Orders</span>
           </button>

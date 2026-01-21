@@ -26,7 +26,9 @@ export default function RetrunDetails({ data, setReturnSidebar }) {
               style={{ backgroundImage: `url(${data.image})` }}
             />
             <div>
-              <h3 className="sm:text-xl text-lg font-bold text-gray-600">{data.title}</h3>
+              <h3 className="sm:text-xl text-lg font-bold text-gray-600">
+                {data.title}
+              </h3>
               <p className="text-[#618961] font-medium">
                 Order #{data.id} • ${data.price}
               </p>
@@ -45,32 +47,32 @@ export default function RetrunDetails({ data, setReturnSidebar }) {
           </div>
           <div className="grid grid-cols-2 gap-x-6 gap-y-3 mt-6 text-sm">
             <div>
-              <p className="text-xs text-gray-500 dark:text-gray-400 uppercase font-bold tracking-wider mb-1">
+              <p className="text-xs text-gray-500 dk:text-gray-400 uppercase font-bold tracking-wider mb-1">
                 Order Date
               </p>
-              <p className="text-[#111811] dark:text-gray-200 font-medium">
+              <p className="text-[#111811] dk:text-gray-200 font-medium">
                 October 26, 2023
               </p>
             </div>
             <div>
-              <p className="text-xs text-gray-500 dark:text-gray-400 uppercase font-bold tracking-wider mb-1">
+              <p className="text-xs text-gray-500 dk:text-gray-400 uppercase font-bold tracking-wider mb-1">
                 Quantity
               </p>
-              <p className="text-[#111811] dark:text-gray-200 font-medium">1</p>
+              <p className="text-[#111811] dk:text-gray-200 font-medium">1</p>
             </div>
             <div>
-              <p className="text-xs text-gray-500 dark:text-gray-400 uppercase font-bold tracking-wider mb-1">
+              <p className="text-xs text-gray-500 dk:text-gray-400 uppercase font-bold tracking-wider mb-1">
                 Return Requested
               </p>
-              <p className="text-[#111811] dark:text-gray-200 font-medium">
+              <p className="text-[#111811] dk:text-gray-200 font-medium">
                 Today, 10:23 AM
               </p>
             </div>
             <div>
-              <p className="text-xs text-gray-500 dark:text-gray-400 uppercase font-bold tracking-wider mb-1">
+              <p className="text-xs text-gray-500 dk:text-gray-400 uppercase font-bold tracking-wider mb-1">
                 Expected Refund
               </p>
-              <p className="text-[#111811] dark:text-gray-200 font-medium">
+              <p className="text-[#111811] dk:text-gray-200 font-medium">
                 $12.50
               </p>
             </div>

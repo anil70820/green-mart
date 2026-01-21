@@ -90,10 +90,10 @@ const Dropdown = ({ trigger, children }) => {
       {open && (
         <div
           ref={dropdownRef}
-           onClick={(e) => e.stopPropagation()}
+          onClick={(e) => e.stopPropagation()}
           style={style}
-          className="z-50 rounded-xl bg-white dark:bg-[#162b16]
-          shadow-lg ring-1 ring-black/10 dark:ring-white/10 flex flex-col overflow-hidden"
+          className="z-50 rounded-xl bg-white dk:bg-[#162b16]
+          shadow-lg ring-1 ring-black/10 dk:ring-white/10 flex flex-col overflow-hidden"
         >
           {children}
         </div>
