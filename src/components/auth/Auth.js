@@ -1,14 +1,19 @@
 "use client";
 
+import { setUser } from "@/redux/slice/authSlice";
 import api from "@/utils/axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 
 export default function AuthPage() {
   const [mode, setMode] = useState("login");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const router = useRouter();
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -24,11 +29,12 @@ export default function AuthPage() {
         });
 
         localStorage.setItem("token", res.data.token);
-         toast.success("Login successful 🎉");
+        toast.success("Login successful 🎉");
+        dispatch(setUser(res.data.user));
         router.push("/");
       } else {
         await api.post("/user/register", data);
-         toast.success("Account created successfully");
+        toast.success("Account created successfully");
         setMode("login");
       }
     } catch (err) {
@@ -97,11 +103,19 @@ export default function AuthPage() {
                   <label className="block text-xs font-semibold text-gray-600 mb-1">
                     Password
                   </label>
-                  <input
-                    type="password"
-                    {...register("password", { required: true })}
-                    className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm"
-                  />
+                  <div className="relative">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      {...register("password", { required: true })}
+                      className="w-full rounded-xl border border-gray-200 ps-4 pe-12 py-2.5 text-sm"
+                    />
+                    <span
+                      onClick={() => setShowPassword(!showPassword)}
+                      className={`material-symbols-outlined cursor-pointer absolute top-1/2 right-4 -translate-y-1/2 ${showPassword ? "text-red-500" : "text-green-500"}`}
+                    >
+                      {showPassword ? "visibility_off" : "visibility"}
+                    </span>
+                  </div>
                 </div>
 
                 {mode === "register" && (
@@ -109,11 +123,21 @@ export default function AuthPage() {
                     <label className="block text-xs font-semibold text-gray-600 mb-1">
                       Confirm password
                     </label>
-                    <input
-                      type="password"
-                      {...register("confirmPassword")}
-                      className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm"
-                    />
+                    <div className="relative">
+                      <input
+                        type={showConfirmPassword ? "text" : "password"}
+                        {...register("confirmPassword")}
+                        className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm"
+                      />
+                      <span
+                        onClick={() =>
+                          setShowConfirmPassword(!showConfirmPassword)
+                        }
+                        className={`material-symbols-outlined cursor-pointer absolute top-1/2 right-4 -translate-y-1/2 ${showConfirmPassword ? "text-red-500" : "text-green-500"}`}
+                      >
+                        {showConfirmPassword ? "visibility_off" : "visibility"}
+                      </span>
+                    </div>
                   </div>
                 )}
 
@@ -125,8 +149,8 @@ export default function AuthPage() {
                   {isSubmitting
                     ? "Please wait..."
                     : mode === "login"
-                    ? "Login to your account"
-                    : "Create account"}
+                      ? "Login to your account"
+                      : "Create account"}
                 </button>
               </form>
 

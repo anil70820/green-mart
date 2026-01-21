@@ -9,7 +9,8 @@ import { toast } from "react-toastify";
 const Profile = ({ isOpen, onClose }) => {
   const { user, isAuth } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-
+  const cartItems = useSelector((state) => state.cart.items);
+  const wishlistItems = useSelector((state) => state.wishlist.items);
   const [isDark, setIsDark] = useState(false);
 
   // page load par localStorage check
@@ -41,7 +42,6 @@ const Profile = ({ isOpen, onClose }) => {
     onClose();
   };
 
-  console.log("user:", user);
   return (
     <Sidebar isOpen={isOpen} onClose={onClose} position="right" header={false}>
       <header className="border-b border-gray-100 dk:border-gray-800 flex items-center justify-between shrink-0 px-4 pb-4">
@@ -178,6 +178,11 @@ const Profile = ({ isOpen, onClose }) => {
             <span className="flex-1 text-gray-700 dk:text-gray-200 font-medium">
               Wishlist
             </span>
+            {wishlistItems.length !== 0 && (
+              <span className="bg-[#3fa659] text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                {wishlistItems.length} {wishlistItems.length == 1 ? "item":"items"}
+              </span>
+            )}
             <span className="material-symbols-outlined text-gray-300 dk:text-gray-600 group-hover:translate-x-1 transition-transform">
               chevron_right
             </span>
@@ -188,12 +193,17 @@ const Profile = ({ isOpen, onClose }) => {
           >
             <div className="w-10 h-10 flex items-center justify-center rounded-lg bg-gray-50 dk:bg-gray-800 group-hover:bg-[#3fa659]/20 group-hover:text-[#3fa659] transition-colors">
               <span className="material-symbols-outlined text-[22px]">
-               shopping_cart_checkout
+                shopping_cart_checkout
               </span>
             </div>
             <span className="flex-1 text-gray-700 dk:text-gray-200 font-medium">
               Cart
             </span>
+            {cartItems.length !== 0 && (
+              <span className="bg-[#3fa659] text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                {cartItems.length} {cartItems.length == 1 ? "item":"items"}
+              </span>
+            )}
             <span className="material-symbols-outlined text-gray-300 dk:text-gray-600 group-hover:translate-x-1 transition-transform">
               chevron_right
             </span>
@@ -266,7 +276,7 @@ const Profile = ({ isOpen, onClose }) => {
                 checked={isDark}
                 onChange={toggleDarkMode}
               />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dk:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dk:border-gray-600 peer-checked:bg-[#3fa659]"></div>
+              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dk:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dk:border-gray-600 peer-checked:bg-[#3fa659]"></div>
             </label>
           </div>
           <a
