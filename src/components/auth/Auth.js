@@ -17,7 +17,8 @@ export default function AuthPage() {
   const {
     register,
     handleSubmit,
-    formState: { isSubmitting },
+    watch,
+    formState: { errors, isSubmitting },
   } = useForm();
 
   const onSubmit = async (data) => {
@@ -38,7 +39,7 @@ export default function AuthPage() {
         setMode("login");
       }
     } catch (err) {
-      console.error(err.response?.data?.message || "Something went wrong");
+      toast.error(err.response?.data?.message || "Something went wrong");
     }
   };
   return (
@@ -82,9 +83,20 @@ export default function AuthPage() {
                     </label>
                     <input
                       type="text"
-                      {...register("name")}
+                      {...register("name", {
+                        required: "Name is required",
+                        minLength: {
+                          value: 3,
+                          message: "Name must be at least 3 characters",
+                        },
+                      })}
                       className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm"
                     />
+                    {errors.name && (
+                      <p className="text-xs text-red-500 font-medium mt-1">
+                        {errors.name.message}
+                      </p>
+                    )}
                   </div>
                 )}
 
@@ -94,9 +106,20 @@ export default function AuthPage() {
                   </label>
                   <input
                     type="email"
-                    {...register("email", { required: true })}
+                    {...register("email", {
+                      required: "Email is required",
+                      pattern: {
+                        value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                        message: "Enter a valid email address",
+                      },
+                    })}
                     className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm"
                   />
+                  {errors.email && (
+                    <p className="text-xs text-red-500 mt-1 font-medium">
+                      {errors.email.message}
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -106,7 +129,13 @@ export default function AuthPage() {
                   <div className="relative">
                     <input
                       type={showPassword ? "text" : "password"}
-                      {...register("password", { required: true })}
+                      {...register("password", {
+                        required: "Password is required",
+                        minLength: {
+                          value: 6,
+                          message: "Password must be at least 6 characters",
+                        },
+                      })}
                       className="w-full rounded-xl border border-gray-200 ps-4 pe-12 py-2.5 text-sm"
                     />
                     <span
@@ -116,6 +145,11 @@ export default function AuthPage() {
                       {showPassword ? "visibility_off" : "visibility"}
                     </span>
                   </div>
+                  {errors.password && (
+                    <p className="text-xs text-red-500 mt-1 font-medium">
+                      {errors.password.message}
+                    </p>
+                  )}
                 </div>
 
                 {mode === "register" && (
@@ -126,7 +160,12 @@ export default function AuthPage() {
                     <div className="relative">
                       <input
                         type={showConfirmPassword ? "text" : "password"}
-                        {...register("confirmPassword")}
+                        {...register("confirmPassword", {
+                          required: "Confirm password is required",
+                          validate: (value) =>
+                            value === watch("password") ||
+                            "Passwords do not match",
+                        })}
                         className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm"
                       />
                       <span
@@ -138,6 +177,11 @@ export default function AuthPage() {
                         {showConfirmPassword ? "visibility_off" : "visibility"}
                       </span>
                     </div>
+                    {errors.confirmPassword && (
+                      <p className="text-xs text-red-500 font-medium mt-1">
+                        {errors.confirmPassword.message}
+                      </p>
+                    )}
                   </div>
                 )}
 
