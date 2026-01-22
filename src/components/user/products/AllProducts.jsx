@@ -9,12 +9,15 @@ import {
 import api from "@/utils/axios";
 import Image from "next/image";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
 const AllProducts = () => {
   const [product, setProduct] = useState([]);
+  const searchParams = useSearchParams();
+  const category = searchParams.get("category") || "all";
   const dispatch = useDispatch();
   const wishlist = useSelector((state) => state.wishlist.items);
   const cartItems = useSelector((state) => state.cart.items);
@@ -25,7 +28,9 @@ const AllProducts = () => {
     wishlist.some((item) => item.productId === productId);
   const fetchProducts = async () => {
     try {
-      const res = await api.get("/product/all-products");
+      const res = await api.get("/product/all-products", {
+        params: { category },
+      });
       console.log("products:", res);
       setProduct(Array.isArray(res.data.products) ? res.data.products : []);
     } catch (err) {
@@ -45,7 +50,7 @@ const AllProducts = () => {
   };
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [category]);
   useEffect(() => {
     dispatch(fetchWishlist());
     dispatch(fetchCart());
@@ -71,97 +76,115 @@ const AllProducts = () => {
         height={117}
       />
       <div className="container xl:max-w-285 mx-auto px-5 xl:px-0">
-        <div className="grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2 lg:gap-6 md:gap-5 gap-3">
-          {(product || []).map((product) => {
-            return (
-              <div
-                key={product._id}
-                className="flex flex-col justify-between border hover:border-light-green/50 border-white shadow-[4px_4px_14px_0px_#3F8A3114] hover:shadow-[4px_4px_16px_0px_#3F8A3114] rounded-2xl relative transition-all duration-300 h-full"
-              >
-                <p className="max-w-19.25 h-6 flex items-center justify-center round p-1 bg-light-green font-iner font-medium text-xs leading-100 text-center text-[#fcfcfc] w-full rounded-tr-2xl rounded-br-2xl absolute left-0 md:top-4.5 top-2">
-                  20% Off
-                </p>
-                <span
-                  onClick={() => handleWishlistToggle(product._id)}
-                  className="cursor-pointer absolute md:top-4.5 top-2 md:right-4.5 right-2"
+        {product.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-20 text-center">
+            <Image
+              src="/assets/images/download.jpeg" // optional image
+              alt="No products"
+              width={200}
+              height={200}
+              className="mb-6 opacity-80"
+            />
+            <h2 className="text-xl font-semibold text-gray-800">
+              No products found
+            </h2>
+            <p className="text-gray-500 mt-2">
+              No products available in this category.
+            </p>
+          </div>
+        ) : (
+          <div className="grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2 lg:gap-6 md:gap-5 gap-3">
+            {(product || []).map((product) => {
+              return (
+                <div
+                  key={product._id}
+                  className="flex flex-col justify-between border hover:border-light-green/50 border-white shadow-[4px_4px_14px_0px_#3F8A3114] hover:shadow-[4px_4px_16px_0px_#3F8A3114] rounded-2xl relative transition-all duration-300 h-full"
                 >
-                  <Icons
-                    icon="heartIcon"
-                    toggleIcon={isInWishlist(product._id) ? "stroke-red" : ""}
-                    toggleIconFill={
-                      isInWishlist(product._id) ? "fill-red stroke-red" : ""
-                    }
-                  />
-                </span>
-
-                <div className="sm:max-h-36.5 max-h-25 w-full mt-16">
-                  <Image
-                    src={product.images?.[0]}
-                    alt={product.title}
-                    fill={false}
-                    width={0}
-                    height={0}
-                    sizes="100vw"
-                    className="object-contain w-full max-h-full"
-                  />
-                </div>
-                <div className="sm:p-4.5 p-2">
-                  <div className="flex justify-between gap-4 mb-1">
-                    <p className="font-normal text-light-green/60 leading-100 text-13 font-inter">
-                      {product.categoryName}
-                    </p>
-                    <p className="text-black flex items-center gap-0.5 font-inter font-medium leading-100 md:text-xl sm:text-lg text-base">
-                      <Image
-                        src="/assets/images/svg/rating_star.svg"
-                        alt="rating-star"
-                        width={24}
-                        height={24}
-                      />
-                      {product.rating}
-                    </p>
-                  </div>
-                  <h3 className="font-inter font-semibold md:text-lg sm:text-base text-sm text-black leading-100 md:mb-1.5 mb-1 max-w-full line-clamp-2 overflow-ellipsis">
-                    {product.title}
-                  </h3>
-                  <p className="font-inter font-normal md:text-sm text-xs text-black-600 leading-100 md:mb-4 mb-2">
-                    {product.weight}
+                  <p className="max-w-19.25 h-6 flex items-center justify-center round p-1 bg-light-green font-iner font-medium text-xs leading-100 text-center text-[#fcfcfc] w-full rounded-tr-2xl rounded-br-2xl absolute left-0 md:top-4.5 top-2">
+                    20% Off
                   </p>
-                  <div className="flex sm:items-center justify-between gap-2 max-sm:flex-col">
-                    <p className="font-inter font-semibold md:text-base sm:text-sm text-xs text-black">
-                      ${product.price.toFixed(2)}
-                      <del className="font-medium md:text-xs text-[10px] text-[#6D6D6D] ms-1">
-                        ${product.discountPrice.toFixed(2)}
-                      </del>
+                  <span
+                    onClick={() => handleWishlistToggle(product._id)}
+                    className="cursor-pointer absolute md:top-4.5 top-2 md:right-4.5 right-2"
+                  >
+                    <Icons
+                      icon="heartIcon"
+                      toggleIcon={isInWishlist(product._id) ? "stroke-red" : ""}
+                      toggleIconFill={
+                        isInWishlist(product._id) ? "fill-red stroke-red" : ""
+                      }
+                    />
+                  </span>
+
+                  <div className="sm:max-h-36.5 max-h-25 w-full mt-16">
+                    <Image
+                      src={product.images?.[0]}
+                      alt={product.title}
+                      fill={false}
+                      width={0}
+                      height={0}
+                      sizes="100vw"
+                      className="object-contain w-full max-h-full"
+                    />
+                  </div>
+                  <div className="sm:p-4.5 p-2">
+                    <div className="flex justify-between gap-4 mb-1">
+                      <p className="font-normal text-light-green/60 leading-100 text-13 font-inter">
+                        {product.categoryName}
+                      </p>
+                      <p className="text-black flex items-center gap-0.5 font-inter font-medium leading-100 md:text-xl sm:text-lg text-base">
+                        <Image
+                          src="/assets/images/svg/rating_star.svg"
+                          alt="rating-star"
+                          width={24}
+                          height={24}
+                        />
+                        {product.rating}
+                      </p>
+                    </div>
+                    <h3 className="font-inter font-semibold md:text-lg sm:text-base text-sm text-black leading-100 md:mb-1.5 mb-1 max-w-full line-clamp-2 overflow-ellipsis">
+                      {product.title}
+                    </h3>
+                    <p className="font-inter font-normal md:text-sm text-xs text-black-600 leading-100 md:mb-4 mb-2">
+                      {product.weight}
                     </p>
-                    {isInCart(product._id) ? (
-                      <Link
-                        href="/cart"
-                        className="rounded-lg bg-green-500/20 hover:bg-green-500/10 duration-300 text-green-700 p-1 h-7 sm:text-sm text-xs font-medium font-inter sm:max-w-20 w-full flex items-center justify-center gap-1"
-                      >
-                        <Icons
-                          icon="cartIcon"
-                          className="group-hover:stroke-white transition-all duration-300"
-                        />
-                        View
-                      </Link>
-                    ) : (
-                      <button
-                        onClick={() => handleAddToCart(product)}
-                        className="cursor-pointer rounded-lg bg-[#B8DDB4]/45 p-1 h-7 sm:text-sm text-xs font-medium font-inter sm:max-w-16.75 w-full flex items-center justify-center gap-1 hover:bg-light-green hover:text-white transition-all duration-300 group"
-                      >
-                        <Icons
-                          icon="cartIcon"
-                          className="group-hover:stroke-white transition-all duration-300"
-                        />
-                        Add
-                      </button>
-                    )}
+                    <div className="flex sm:items-center justify-between gap-2 max-sm:flex-col">
+                      <p className="font-inter font-semibold md:text-base sm:text-sm text-xs text-black">
+                        ${product.price.toFixed(2)}
+                        <del className="font-medium md:text-xs text-[10px] text-[#6D6D6D] ms-1">
+                          ${product.discountPrice.toFixed(2)}
+                        </del>
+                      </p>
+                      {isInCart(product._id) ? (
+                        <Link
+                          href="/cart"
+                          className="rounded-lg bg-green-500/20 hover:bg-green-500/10 duration-300 text-green-700 p-1 h-7 sm:text-sm text-xs font-medium font-inter sm:max-w-20 w-full flex items-center justify-center gap-1"
+                        >
+                          <Icons
+                            icon="cartIcon"
+                            className="group-hover:stroke-white transition-all duration-300"
+                          />
+                          View
+                        </Link>
+                      ) : (
+                        <button
+                          onClick={() => handleAddToCart(product)}
+                          className="cursor-pointer rounded-lg bg-[#B8DDB4]/45 p-1 h-7 sm:text-sm text-xs font-medium font-inter sm:max-w-16.75 w-full flex items-center justify-center gap-1 hover:bg-light-green hover:text-white transition-all duration-300 group"
+                        >
+                          <Icons
+                            icon="cartIcon"
+                            className="group-hover:stroke-white transition-all duration-300"
+                          />
+                          Add
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );
