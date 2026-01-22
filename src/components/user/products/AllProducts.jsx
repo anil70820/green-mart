@@ -1,4 +1,5 @@
 "use client";
+import Icons from "@/components/common/Icons";
 import { addToCart, fetchCart } from "@/redux/slice/cartSlice";
 import {
   addToWishlist,
@@ -7,19 +8,16 @@ import {
 } from "@/redux/slice/wishlistSlice";
 import api from "@/utils/axios";
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import Cta from "../common/Cta";
-import Icons from "../common/Icons";
-import { toast } from "react-toastify";
 import Link from "next/link";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
-const FeaturedProducts = () => {
+const AllProducts = () => {
   const [product, setProduct] = useState([]);
   const dispatch = useDispatch();
   const wishlist = useSelector((state) => state.wishlist.items);
   const cartItems = useSelector((state) => state.cart.items);
-  const { isAuth } = useSelector((state) => state.auth);
   const isInCart = (productId) =>
     cartItems.some((item) => item.product?._id === productId);
 
@@ -43,11 +41,7 @@ const FeaturedProducts = () => {
         quantity: 1,
       }),
     );
-    if (isAuth) {
-      toast.success("Product added to your Cart.");
-    } else {
-      toast.error("Only login user can add in Cart.");
-    }
+    toast.success("Product added to your Cart.");
   };
   useEffect(() => {
     fetchProducts();
@@ -63,14 +57,10 @@ const FeaturedProducts = () => {
       toast.success("Product removed from your wishlist.");
     } else {
       dispatch(addToWishlist(productId));
-      if (isAuth) {
-        toast.success("Product added to your wishlist.");
-      } else {
-        toast.error("Only login user can add in wishlist.");
-      }
+      toast.success("Product added to your wishlist.");
+      console.log("wishlistId:", productId);
     }
   };
-
   return (
     <div className="lg:py-16 md:py-12 sm:py-9 py-6 relative">
       <Image
@@ -81,14 +71,11 @@ const FeaturedProducts = () => {
         height={117}
       />
       <div className="container xl:max-w-285 mx-auto px-5 xl:px-0">
-        <h2 className="font-gilroy-bold text-off-black text-center xl:text-[54px] lg:text-5xl md:text-4xl text-3xl leading-[130%] md:mb-6 mb-5">
-          Featured Products
-        </h2>
         <div className="grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2 lg:gap-6 md:gap-5 gap-3">
-          {(product || []).map((product, index) => {
+          {(product || []).map((product) => {
             return (
               <div
-                key={index}
+                key={product._id}
                 className="flex flex-col justify-between border hover:border-light-green/50 border-white shadow-[4px_4px_14px_0px_#3F8A3114] hover:shadow-[4px_4px_16px_0px_#3F8A3114] rounded-2xl relative transition-all duration-300 h-full"
               >
                 <p className="max-w-19.25 h-6 flex items-center justify-center round p-1 bg-light-green font-iner font-medium text-xs leading-100 text-center text-[#fcfcfc] w-full rounded-tr-2xl rounded-br-2xl absolute left-0 md:top-4.5 top-2">
@@ -137,11 +124,11 @@ const FeaturedProducts = () => {
                     {product.title}
                   </h3>
                   <p className="font-inter font-normal md:text-sm text-xs text-black-600 leading-100 md:mb-4 mb-2">
-                    {product.weight}{product.weightUnit}
+                    {product.weight}
                   </p>
                   <div className="flex sm:items-center justify-between gap-2 max-sm:flex-col">
-                    <p className="font-inter font-semibold md:text-base sm:text-sm text-xs text-black flex flex-wrap items-end">
-                    <span>${product.price.toFixed(2)}</span>
+                    <p className="font-inter font-semibold md:text-base sm:text-sm text-xs text-black">
+                      ${product.price.toFixed(2)}
                       <del className="font-medium md:text-xs text-[10px] text-[#6D6D6D] ms-1">
                         ${product.discountPrice.toFixed(2)}
                       </del>
@@ -175,12 +162,9 @@ const FeaturedProducts = () => {
             );
           })}
         </div>
-        <Cta href="/products" className="mt-10 max-w-53.75 mx-auto">
-          View All Products
-        </Cta>
       </div>
     </div>
   );
 };
 
-export default FeaturedProducts;
+export default AllProducts;

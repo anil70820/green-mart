@@ -5,7 +5,7 @@ export const NAV_LINKS_LIST = [
   },
   {
     title: "Shop",
-    url: "#shop",
+    url: "/products",
   },
   {
     title: "Cart",
@@ -491,3 +491,25 @@ export const PRODUCTS_TAB_LIST = [
   { key: "active", label: "Active" },
   { key: "inactive", label: "Inactive" },
 ];
+
+export const product = {
+  id: 1,
+  title: "Bamboo Fiber Reusable Coffee Cup - 12oz",
+  brand: "EcoLiving Basics",
+  price: 12.99,
+  mrp: 18,
+  rating: 4.5,
+  reviewsCount: 128,
+  images: [
+    "https://lh3.googleusercontent.com/aida-public/AB6AXuDlfHM-eXLqOVKFgtvM-knig5zT_WNuieliMUT4PLOhkBKnlGiGgXRurn8qR_hHUb1s6YM4ja4Uq92rhT_hTbFgmTF4rUfwYMH1qZcJXk3fP9yUaG8Q15fFranN9EcM_cM9pXlgC7HmUzbQG8LOQEYwvjTwe8grefVGEfoN3SdXGUuPyHIYMOEq8Kcn10f8VM7HoUDXL13jBGS98AidmGcjIPV33u8ngBQ1QBOlgZm5APJyfzIUtEB3g9o3EUi7boxgtq5EDu1RzS1R",
+    "https://lh3.googleusercontent.com/aida-public/AB6AXuAe8Tq3SCknuBcBXcmYc5kJUFY_WwgKyC1wIQR1dYIl93MxCpvPNm8a64FaUDUPE5QV9uEzrDeu-OcIOLSZvpUFp6T42B5MzZYPJ116Mcv-ARjqv3CBwggIC5uAax_mayf_yBiolp1yLwQPtroTFkOGWbTsmD6pv-r4Jrjyshtjzy5wZgCDJt7fd_yXkJGxqIBCUoJzo-u-RWFpE2i1Gu4EQWB_4UZlNX0oIkyh3s1eEk55jV1RWZUso4SYY3Q6pzqtlYSZzfYW-3CI",
+    "https://lh3.googleusercontent.com/aida-public/AB6AXuBeNiJ2SWur9ZoR8IM0cXwLseL2hXg1iFEcbMzhidFV3JzUFqphMvRcAkk-Q9S4HqHMHFA8l2Lwp4CjAP5u0xNAx0Mt3Iu6dEJl5tONGH2Qp7WeXfk7xmm7lUxrA6jQaUuZgu9DglTRcYKWNRPDp2jt6ua8D3oNWKUCE34e6zAWjMHyd25UMgUp99WcwtWClk4qjdNVWBEtSjNUIC4oVoemkaGluLpPvxk6-iJfAINVaLQG1khgBxa9YpcnazIAO5w8WxVcoXqkM3Zk",
+    "https://lh3.googleusercontent.com/aida-public/AB6AXuCf9U5PCjQ65lG8QWzmu2_QgIydIBQBnp4Sp1s42ISEGC6QTBztIBQUHTcEHkuJUEpncJDoMi5Do365Y6vx3ndo_upl5nnoYiJ5K3CgoPQ3bHKAlF-OQBQ0HWxp8HvLXdW27vfYvPotDp-I67Q0NMBZEFV6BxMXHZtLRHiw0jQC9N0UatcLTva1sxHYwjH2FiIFFWL7CeGNQAihLQDdJQsJ4W1Z1-0bpcY_T3hpLZ3QeIKd9OG8X1VmOLnpEDEYYxuUT_aZo0WytnL-",
+  ],
+  colors: [
+    { name: "Natural Sand", code: "#e6dac5" },
+    { name: "Forest Green", code: "#2f3e30" },
+    { name: "Rose Clay", code: "#d68c8c" },
+  ],
+  description: "Sustainable, durable, and stylish reusable bamboo fiber cup.",
+};

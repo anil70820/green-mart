@@ -17,6 +17,7 @@ const AddNewProduct = () => {
     price: "",
     discountPrice: "",
     weight: "",
+    weightUnit: "kg",
     stock: "",
     rating: "",
     description: "",
@@ -38,6 +39,7 @@ const AddNewProduct = () => {
           price: p.price,
           discountPrice: p.discountPrice,
           weight: p.weight,
+          weightUnit: p.weightUnit || "kg",
           stock: p.stock,
           rating: p.rating,
           description: p.description,
@@ -90,6 +92,7 @@ const AddNewProduct = () => {
           price: "",
           discountPrice: "",
           weight: "",
+          weightUnit: "",
           stock: "",
           rating: "",
           description: "",
@@ -137,8 +140,9 @@ const AddNewProduct = () => {
               onChange={handleChange}
               className="h-12 w-full rounded-xl bg-[#f0f4f0] dk:bg-[#1c331c] px-4"
             >
-              <option>Fruits</option>
-              <option>Vegetables</option>
+              <option value="fruits">Fruits</option>
+              <option value="vegetables">Vegetables</option>
+              <option value="groceries">Groceries</option>
             </select>
           </div>
           <InputField
@@ -176,6 +180,18 @@ const AddNewProduct = () => {
             type="text"
             placeholder="Weight (kg / gm)"
           />
+          <select
+            name="weightUnit"
+            value={product.weightUnit}
+            onChange={handleChange}
+            className="h-12 w-full rounded-xl bg-[#f0f4f0] dk:bg-[#1c331c] px-4"
+          >
+            <option value="kg">Kg</option>
+            <option value="gm">Gram</option>
+            <option value="ltr">Liter</option>
+            <option value="ml">ML</option>
+            <option value="pcs">Pieces</option>
+          </select>
           <InputField
             name="stock"
             value={product.stock}
