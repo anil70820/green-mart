@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 import { setSelectedProduct } from "@/redux/slice/seller/productSlice";
 import { PRODUCTS_TAB_LIST } from "@/utils/helper";
 import { statusStyles } from "@/components/admin/sellers/SellerProductsManagemnt";
+import { toast } from "react-toastify";
 
 const ProductsList = () => {
   const [products, setProducts] = useState([]);
@@ -62,6 +63,7 @@ const ProductsList = () => {
 
       // UI se product remove (no refetch needed)
       setProducts((prev) => prev.filter((p) => p.id !== id));
+      toast.success("Product deleted Successfully.")
     } catch (err) {
       console.error(err);
       alert(err.response?.data?.message || "Delete failed");
@@ -197,7 +199,7 @@ const ProductsList = () => {
                         </button>
                         <button
                           onClick={() => {
-                            setSelectedId(p.id);
+                            setSelectedId(p._id);
                             setOpenDelete(true);
                           }}
                           className="px-5 py-2 text-left hover:bg-black/5 min-w-35"

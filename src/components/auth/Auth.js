@@ -12,6 +12,11 @@ export default function AuthPage() {
   const [mode, setMode] = useState("login");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showOtpModal, setShowOtpModal] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [otpUserId, setOtpUserId] = useState(null);
+  const [verifyingOtp, setVerifyingOtp] = useState(false);
+
   const router = useRouter();
   const dispatch = useDispatch();
   const {
@@ -34,12 +39,37 @@ export default function AuthPage() {
         dispatch(setUser(res.data.user));
         router.push("/");
       } else {
-        await api.post("/user/register", data);
-        toast.success("Account created successfully");
-        setMode("login");
+        const res = await api.post("/user/signup", data);
+
+        toast.success(res.data.message || "OTP sent to your email");
+        console.log(res);
+        setOtpUserId(res.data.user.id);
+        setShowOtpModal(true);
       }
     } catch (err) {
       toast.error(err.response?.data?.message || "Something went wrong");
+      console.log(err);
+    }
+  };
+  console.log("userId", otpUserId);
+  const verifyOtp = async () => {
+    if (!otp) {
+      toast.error("Please enter OTP.");
+      return;
+    }
+    try {
+      setVerifyingOtp(true);
+      const res = await api.post("/user/verify-otp", {
+        userId: otpUserId,
+        otp,
+      });
+      toast.success(res.data.message || "Email Verified Successfully!");
+      setShowOtpModal(false);
+      setMode("login");
+      setOtp("");
+      setOtpUserId(null);
+    } catch (err) {
+      toast.error(err.response?.data?.message || "invalid or expired OTP");
     }
   };
   return (
@@ -121,7 +151,31 @@ export default function AuthPage() {
                     </p>
                   )}
                 </div>
-
+                {mode === "register" && (
+                  <div className="w-full">
+                    <label className="block text-xs font-semibold text-gray-600 mb-1">
+                      Your Role
+                    </label>
+                    <select
+                      className="w-full rounded-xl border border-gray-200 focus:outline-none px-4 py-2.5 text-sm"
+                      defaultValue=""
+                      {...register("role", {
+                        required: "Please select a role.",
+                      })}
+                    >
+                      <option value="" disabled>
+                        Select role
+                      </option>
+                      <option value="user">User</option>
+                      <option value="seller">Seller</option>
+                    </select>
+                    {errors.role && (
+                      <p className="text-xs text-red-500 font-medium mt-1">
+                        {errors.role.message}
+                      </p>
+                    )}
+                  </div>
+                )}
                 <div>
                   <label className="block text-xs font-semibold text-gray-600 mb-1">
                     Password
@@ -204,6 +258,42 @@ export default function AuthPage() {
             </div>
           </div>
         </div>
+        {showOtpModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/10 px-4">
+            <div className="bg-white w-full max-w-sm rounded-2xl p-6 shadow-lg">
+              <h2 className="text-lg font-bold text-gray-800 mb-2">
+                Verify your email
+              </h2>
+              <p className="text-xs text-gray-500 mb-4">
+                Enter the 6-digit OTP sent to your email
+              </p>
+
+              <input
+                type="text"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+                maxLength={6}
+                placeholder="Enter OTP"
+                className="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm mb-3 focus:outline-none focus:ring-2 focus:ring-green-500"
+              />
+
+              <button
+                onClick={verifyOtp}
+                // disabled={verifyingOtp}
+                className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 rounded-xl"
+              >
+                {verifyingOtp ? "Verifying..." : "Verify OTP"}
+              </button>
+
+              <button
+                onClick={() => setShowOtpModal(false)}
+                className="w-full text-xs text-gray-500 mt-3 hover:underline"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );

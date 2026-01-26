@@ -44,7 +44,7 @@ const Profile = ({ isOpen, onClose }) => {
 
   return (
     <Sidebar isOpen={isOpen} onClose={onClose} position="right" header={false}>
-      <header className="border-b border-gray-100 dk:border-gray-800 flex items-center justify-between shrink-0 px-4 pb-4">
+      <header className="border-b border-gray-100 dk:border-gray-800 flex items-center justify-between px-4 pb-4 w-full gap-5">
         <div className="flex items-center gap-4">
           <div className="relative">
             <div className="flex items-center gap-2 ">
@@ -69,15 +69,15 @@ const Profile = ({ isOpen, onClose }) => {
             <h2 className="text-gray-900 dk:text-white font-bold text-lg leading-tight">
               {user?.name}
             </h2>
-            <p className="text-gray-500 capitalize dk:text-gray-400 text-sm">
-              Role: {user?.role}
+            <p className="text-gray-500 dk:text-gray-400 text-sm text-ellipsis line-clamp-2 break-all">
+             Email: {user?.email}
             </p>
           </div>
         </div>
 
         <span
           onClick={onClose}
-          className="material-symbols-outlined hover:text-green-500 transition-all duration-300 cursor-pointer"
+          className="material-symbols-outlined hover:text-green-500 transition-all duration-300 cursor-pointer text-2xl!"
         >
           close
         </span>

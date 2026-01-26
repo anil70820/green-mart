@@ -142,7 +142,10 @@ const AddNewProduct = () => {
             >
               <option value="fruits">Fruits</option>
               <option value="vegetables">Vegetables</option>
-              <option value="groceries">Groceries</option>
+              <option value="cooking-oil">Cooking Oil</option>
+              <option value="ghee">Ghee</option>
+              <option value="bakery-snacks">Backery and Snacks</option>
+              <option value="beverage">Beverages (Drinks)</option>
             </select>
           </div>
           <InputField

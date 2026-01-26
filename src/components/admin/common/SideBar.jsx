@@ -4,6 +4,9 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import { logout } from "@/redux/slice/authSlice";
 
 const menuItems = [
   { name: "Dashboard", icon: "dashboard", href: "/admin/dashboard" },
@@ -39,7 +42,13 @@ const bottomMenu = [
 
 const SideBar = ({ open, setOpen }) => {
   const pathname = usePathname();
-
+  const dispatch = useDispatch();
+  const logOutUser = () => {
+    localStorage.removeItem("token");
+    dispatch(logout());
+    toast.success("Logout successfully");
+    setOpen(false);
+  };
   return (
     <>
       {/* Overlay */}
@@ -55,72 +64,85 @@ const SideBar = ({ open, setOpen }) => {
         overflow-y-auto h-screen
         ${open ? "translate-x-0" : "-translate-x-full lg:translate-0"}`}
       >
-        <div className="flex flex-col h-full p-4">
-          {/* Header */}
-          <div className="flex items-center justify-between pb-6 border-b border-gray-100  mb-4">
-            <Link href="/" className="relative z-[99]">
-              <Image
-                src="/assets/images/svg/logo.svg"
-                alt="Logo"
-                width={246}
-                height={55}
-                className="lg:w-[246px] w-[180px] h-auto"
-                sizes="100vw"
-              />
-            </Link>
+        <div className="flex flex-col justify-between gap-5 h-full">
+          <div className="flex flex-col px-4">
+            {/* Header */}
+            <div className="flex sticky top-0 pt-4 left-0 z-10 bg-white items-center justify-between pb-6 border-b border-gray-100  mb-4">
+              <Link href="/" className="relative z-[99]">
+                <Image
+                  src="/assets/images/svg/logo.svg"
+                  alt="Logo"
+                  width={246}
+                  height={55}
+                  className="lg:w-[246px] w-[180px] h-auto"
+                  sizes="100vw"
+                />
+              </Link>
 
-            <button
-              onClick={() => setOpen(false)}
-              className="rounded-full
+              <button
+                onClick={() => setOpen(false)}
+                className="rounded-full
         text-[#111811] hover:text-green-600 duration-300 cursor-pointer lg:hidden"
-            >
-              <span className="material-symbols-outlined">close</span>
-            </button>
-          </div>
+              >
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
 
-          {/* Menu */}
-          <ul className="flex flex-col gap-1">
-            {menuItems.map((item) => {
-              const isActive = pathname === item.href;
+            {/* Menu */}
+            <ul className="flex flex-col gap-1">
+              {menuItems.map((item) => {
+                const isActive = pathname === item.href;
 
-              return (
-                <li key={item.name}>
-                  <Link
-                    href={item.href}
-                    onClick={() => setOpen(false)}
-                    className={`flex items-center gap-3 px-3 py-3 rounded-lg font-medium
+                return (
+                  <li key={item.name}>
+                    <Link
+                      href={item.href}
+                      onClick={() => setOpen(false)}
+                      className={`flex items-center gap-3 px-3 py-3 rounded-lg font-medium
                     ${
                       isActive
                         ? "bg-green-500/20 text-[#0a3d0a] font-bold"
                         : "hover:bg-gray-50  text-[#111811] "
                     }`}
+                    >
+                      <span className="material-symbols-outlined">
+                        {item.icon}
+                      </span>
+                      {item.name}
+                    </Link>
+                  </li>
+                );
+              })}
+
+              <div className="my-2 border-t border-gray-100 " />
+
+              {bottomMenu.map((item) => (
+                <li key={item.name}>
+                  <Link
+                    href={item.href}
+                    onClick={() => setOpen(false)}
+                    className="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-gray-50  text-[#525c52] text-sm"
                   >
-                    <span className="material-symbols-outlined">
+                    <span className="material-symbols-outlined text-[20px]">
                       {item.icon}
                     </span>
                     {item.name}
                   </Link>
                 </li>
-              );
-            })}
-
-            <div className="my-2 border-t border-gray-100 " />
-
-            {bottomMenu.map((item) => (
-              <li key={item.name}>
-                <Link
-                  href={item.href}
-                  onClick={() => setOpen(false)}
-                  className="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-gray-50  text-[#525c52] text-sm"
-                >
-                  <span className="material-symbols-outlined text-[20px]">
-                    {item.icon}
-                  </span>
-                  {item.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
+              ))}
+            </ul>
+          </div>
+          <div className="px-4 border-t border-t-gray-100 py-5">
+            <button
+              onClick={logOutUser}
+              className="w-full flex items-center justify-center gap-3 py-4 rounded-xl bg-[#D62D20] text-white font-bold text-sm tracking-wide shadow-lg shadow-[#D62D20]/20 hover:brightness-110 active:scale-[0.98] transition-all"
+            >
+              <span className="material-symbols-outlined text-[20px]">
+                logout
+              </span>
+              Logout
+            </button>
+          </div>
         </div>
       </div>
     </>
