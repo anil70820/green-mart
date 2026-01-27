@@ -63,7 +63,7 @@ export default function RootLayout({ children }) {
           }}
         />
       </head>
-      <body data-new-gr-c-s-check-loaded="14.1269.0" data-gr-ext-installed="">
+      <body data-new-gr-c-s-check-loaded="14.1270.0" data-gr-ext-installed="">
         <ReduxProvider>
           {children}
           <ToastContainer

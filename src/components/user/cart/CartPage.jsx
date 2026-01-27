@@ -16,8 +16,10 @@ export default function CartPage() {
 
   /* FETCH CART ON LOAD */
   useEffect(() => {
-    dispatch(fetchCart());
-  }, [dispatch]);
+    if (cart.length === 0) {
+      dispatch(fetchCart());
+    }
+  }, [dispatch, cart.length]);
 
   /* TOTALS */
   const totals = useMemo(() => {
