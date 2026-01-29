@@ -5,6 +5,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 const initialOrders = [
   {
@@ -56,7 +57,6 @@ export default function OrdersPage() {
     activeFilter === "All"
       ? orders
       : orders.filter((o) => o.status === activeFilter);
-
   return (
     <div className="bg-[#F5F7FA] py-10">
       <div className="xl:max-w-285 xl:px-0 px-5 mx-auto container">
@@ -72,7 +72,6 @@ export default function OrdersPage() {
             Back to Shop
           </Link>
         </div>
-
         {/* Filters */}
         <div className="flex flex-wrap gap-2 mb-6">
           {filters.map((f) => {

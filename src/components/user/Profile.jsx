@@ -5,6 +5,8 @@ import Sidebar from "../common/Sidebar";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "@/redux/slice/authSlice";
 import { toast } from "react-toastify";
+import { fetchCart } from "@/redux/slice/cartSlice";
+import { fetchWishlist } from "@/redux/slice/wishlistSlice";
 
 const Profile = ({ isOpen, onClose }) => {
   const { user, isAuth } = useSelector((state) => state.auth);
@@ -41,6 +43,12 @@ const Profile = ({ isOpen, onClose }) => {
     toast.success("Logout successfully");
     onClose();
   };
+  useEffect(() => {
+    if (isAuth) {
+      dispatch(fetchCart());
+      dispatch(fetchWishlist());
+    }
+  }, [dispatch, isAuth]);
 
   return (
     <Sidebar isOpen={isOpen} onClose={onClose} position="right" header={false}>
@@ -70,7 +78,7 @@ const Profile = ({ isOpen, onClose }) => {
               {user?.name}
             </h2>
             <p className="text-gray-500 dk:text-gray-400 text-sm text-ellipsis line-clamp-2 break-all">
-             Email: {user?.email}
+              Email: {user?.email}
             </p>
           </div>
         </div>
@@ -180,7 +188,8 @@ const Profile = ({ isOpen, onClose }) => {
             </span>
             {wishlistItems.length !== 0 && (
               <span className="bg-[#3fa659] text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
-                {wishlistItems.length} {wishlistItems.length == 1 ? "item":"items"}
+                {wishlistItems.length}{" "}
+                {wishlistItems.length == 1 ? "item" : "items"}
               </span>
             )}
             <span className="material-symbols-outlined text-gray-300 dk:text-gray-600 group-hover:translate-x-1 transition-transform">
@@ -201,7 +210,7 @@ const Profile = ({ isOpen, onClose }) => {
             </span>
             {cartItems.length !== 0 && (
               <span className="bg-[#3fa659] text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
-                {cartItems.length} {cartItems.length == 1 ? "item":"items"}
+                {cartItems.length} {cartItems.length == 1 ? "item" : "items"}
               </span>
             )}
             <span className="material-symbols-outlined text-gray-300 dk:text-gray-600 group-hover:translate-x-1 transition-transform">
