@@ -1,14 +1,16 @@
-import AllProducts from '@/components/user/products/AllProducts'
-import CategoryStrip from '@/components/user/products/Categories'
-import React from 'react'
+import AllProducts from "@/components/user/products/AllProducts";
+import CategoryStrip from "@/components/user/products/Categories";
+import React, { Suspense } from "react";
 
 const page = () => {
   return (
     <div>
-      <CategoryStrip/>
-        <AllProducts/>
+      <Suspense fallback={<div>Loading products...</div>}>
+        <CategoryStrip />
+        <AllProducts />
+      </Suspense>
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;
