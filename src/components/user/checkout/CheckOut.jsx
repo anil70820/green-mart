@@ -148,7 +148,7 @@ const CheckOut = () => {
 
             if (verifyRes.data.success) {
               toast.success("Payment Successful 🎉");
-              router.push(`/orders/${dbOrderId}`);
+              router.push("/my-orders");
             } else {
               toast.error("Payment verification failed");
             }
