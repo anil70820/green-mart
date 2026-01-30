@@ -62,6 +62,7 @@ export default function RootLayout({ children }) {
     `,
           }}
         />
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
       </head>
       <body data-new-gr-c-s-check-loaded="14.1270.0" data-gr-ext-installed="">
         <ReduxProvider>

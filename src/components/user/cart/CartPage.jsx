@@ -9,11 +9,22 @@ import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Cta from "../../common/Cta";
 import { toast } from "react-toastify";
+import api from "@/utils/axios";
 
 export default function CartPage() {
   const dispatch = useDispatch();
   const { items: cart, loading } = useSelector((state) => state.cart);
+  useEffect(() => {
+    if (window.Razorpay) return; // duplicate load se bachne ke liye
 
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.async = true;
+    script.onload = () => {
+      console.log("Razorpay SDK loaded");
+    };
+    document.body.appendChild(script);
+  }, []);
   /* FETCH CART ON LOAD */
   useEffect(() => {
     if (cart.length === 0) {
@@ -65,6 +76,53 @@ export default function CartPage() {
   const removeItem = (productId) => {
     dispatch(removeFromCart({ productId }));
   };
+const handleCheckout = async () => {
+  try {
+    // 1️⃣ Create DB Order
+    const orderRes = await api.post("/payment/orders/create", {
+      totalAmount: totals.subtotal,
+    });
+
+    const dbOrderId = orderRes.data.orderId;
+
+    // 2️⃣ Create Razorpay Order
+    const paymentRes = await api.post("/payment/create-order", {
+      orderId: dbOrderId,
+      amount: totals.subtotal,
+    });
+
+    const { orderId, key, amount, currency } = paymentRes.data;
+
+    // 3️⃣ Razorpay options
+    const options = {
+      key,
+      amount,
+      currency,
+      name: "Green Mart",
+      description: "Order Payment",
+      order_id: orderId,
+      handler: async function (response) {
+        // 4️⃣ Verify Payment
+        const verifyRes = await api.post("/payment/verify", response);
+
+        if (verifyRes.data.success) {
+          toast.success("Payment Successful 🎉");
+        } else {
+          toast.error("Payment verification failed");
+        }
+      },
+      theme: { color: "#16a34a" },
+    };
+
+    // 5️⃣ Open Razorpay popup
+    const razorpay = new window.Razorpay(options);
+    razorpay.open();
+
+  } catch (err) {
+    console.error(err);
+    toast.error("Checkout failed");
+  }
+};
 
   return (
     <div className="py-10">
@@ -100,7 +158,7 @@ export default function CartPage() {
                   </span>
 
                   {/* Image */}
-                  <div className="w-24 h-24 flex-shrink-0 rounded-2xl overflow-hidden bg-gray-100 flex items-center justify-center">
+                  <div className="w-24 h-24 shrink-0 rounded-2xl overflow-hidden bg-gray-100 flex items-center justify-center">
                     <img
                       src={item.product.images[0]}
                       alt={item.product.title}
@@ -226,7 +284,7 @@ export default function CartPage() {
                   </div>
                 </div>
 
-                <button className="mt-5 w-full bg-green-600 hover:bg-green-700 text-white text-sm font-semibold py-3 rounded-full transition">
+                <button onClick={handleCheckout} className="mt-5 w-full bg-green-600 hover:bg-green-700 text-white text-sm font-semibold py-3 rounded-full transition">
                   Proceed to Checkout
                 </button>
               </div>

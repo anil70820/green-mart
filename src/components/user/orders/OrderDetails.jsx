@@ -259,7 +259,7 @@ const OrderDetails = () => {
                         {index < statusSteps.length - 1 && (
                           <div
                             className={
-                              "flex-1 h-[2px] mx-1 -mt-5 " +
+                              "flex-1 h-0.5 mx-1 -mt-5 " +
                               (index < currentStepIndex
                                 ? "bg-green-500"
                                 : "bg-gray-200")
@@ -281,7 +281,7 @@ const OrderDetails = () => {
               <div className="space-y-3">
                 {order.items.map((item) => (
                   <div key={item.id} className="flex items-center gap-3">
-                    <div className="w-16 h-16 rounded-2xl overflow-hidden bg-gray-100 flex-shrink-0">
+                    <div className="w-16 h-16 rounded-2xl overflow-hidden bg-gray-100 shrink-0">
                       <img
                         src={item.image}
                         alt={item.name}

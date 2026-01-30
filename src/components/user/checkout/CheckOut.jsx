@@ -269,7 +269,7 @@ const CheckOut = () => {
                   className="flex items-center justify-between text-sm"
                 >
                   <div className="flex items-center gap-2">
-                    <div className="w-10 h-10 rounded-2xl overflow-hidden bg-gray-100 flex-shrink-0">
+                    <div className="w-10 h-10 rounded-2xl overflow-hidden bg-gray-100 shrink-0">
                       <img
                         src={item.image}
                         alt={item.name}
