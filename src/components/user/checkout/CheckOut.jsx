@@ -2,68 +2,170 @@
 
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-
-const initialCart = [
-  {
-    id: 1,
-    name: "Fresh Strawberries",
-    category: "Fruits",
-    weight: "500g",
-    price: 10,
-    oldPrice: 12,
-    quantity: 1,
-    image:
-      "https://images.pexels.com/photos/102104/pexels-photo-102104.jpeg?auto=compress&cs=tinysrgb&w=600",
-  },
-  {
-    id: 2,
-    name: "Fresh Cauliflower",
-    category: "Vegetables",
-    weight: "500g",
-    price: 10,
-    oldPrice: 12,
-    quantity: 2,
-    image:
-      "https://images.pexels.com/photos/1437267/pexels-photo-1437267.jpeg?auto=compress&cs=tinysrgb&w=600",
-  },
-];
+import api from "@/utils/axios";
+import { toast } from "react-toastify";
 
 const CheckOut = () => {
   const router = useRouter();
 
-  const [cart] = useState(initialCart);
-  const [address, setAddress] = useState({
-    fullName: "",
-    phone: "",
-    line1: "",
-    city: "",
-    zip: "",
+  const [cartCheckout, setCartCheckout] = useState({
+    items: [],
+    pricing: {
+      subtotal: 0,
+      discount: 0,
+      shipping: 0,
+      total: 0,
+    },
   });
+
+  const [address, setAddress] = useState({
+    name: "",
+    phone: "",
+    street: "",
+    city: "",
+    state: "",
+    pincode: "",
+  });
+
   const [delivery, setDelivery] = useState("standard");
   const [payment, setPayment] = useState("cod");
+  useEffect(() => {
+    if (window.Razorpay) return; // duplicate load se bachne ke liye
 
-  const totals = useMemo(() => {
-    const subtotal = cart.reduce(
-      (sum, item) => sum + item.price * item.quantity,
-      0,
-    );
-    const oldSubtotal = cart.reduce(
-      (sum, item) => sum + item.oldPrice * item.quantity,
-      0,
-    );
-    const discount = oldSubtotal - subtotal;
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.async = true;
+    script.onload = () => {
+      console.log("Razorpay SDK loaded");
+    };
+    document.body.appendChild(script);
+  }, []);
+  const fetchItems = async () => {
+    try {
+      const res = await api.get("/checkout/preview-ordered-product");
+      setCartCheckout({
+        items: res.data.items,
+        pricing: res.data.pricing,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  useEffect(() => {
+    fetchItems();
+  }, []);
+  const validateCheckout = () => {
+    const { name, phone, street, city, state, pincode } = address;
 
-    const deliveryFee = delivery === "express" ? 4 : 0;
-    const total = subtotal + deliveryFee;
+    if (!name || !phone || !street || !city || !state || !pincode) {
+      toast.error("Please fill all address fields");
+      return false;
+    }
 
-    return { subtotal, oldSubtotal, discount, deliveryFee, total };
-  }, [cart, delivery]);
+    if (phone.length !== 10) {
+      toast.error("Invalid phone number");
+      return false;
+    }
 
-  const handlePlaceOrder = (e) => {
-    e.preventDefault();
-    router.push("/orders");
+    if (pincode.length !== 6) {
+      toast.error("Invalid pincode");
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleCheckout = async () => {
+    try {
+      // ✅ 1. Validate form fields
+      const { name, phone, street, city, state, pincode } = address;
+      if (!name || !phone || !street || !city || !pincode) {
+        toast.error("Please fill all address fields");
+        return;
+      }
+      if (phone.length !== 10) {
+        toast.error("Invalid phone number");
+        return;
+      }
+      if (pincode.length !== 6) {
+        toast.error("Invalid pincode");
+        return;
+      }
+
+      if (!payment) {
+        toast.error("Select a payment method");
+        return;
+      }
+
+      // ✅ 2. Prepare payload for backend
+      const payload = {
+        address: {
+          name,
+          phone,
+          street,
+          city,
+          state: state || "NA", // make sure not empty
+          pincode,
+        },
+        paymentMethod: payment, // COD | UPI | CARD
+        deliveryType: delivery, // standard | express
+      };
+
+      // ✅ 3. Create Order in DB
+      const orderRes = await api.post("/checkout/create-order", payload);
+      const dbOrderId = orderRes.data.orderId;
+
+      // ✅ 4. Handle COD immediately
+      if (payment.toLowerCase() === "cod") {
+        toast.success("Order placed successfully 🎉");
+        router.push("/my-orders");
+        return;
+      }
+
+      // ✅ 5. Razorpay flow for online payment
+      const paymentRes = await api.post("/payment/create-order", {
+        orderId: dbOrderId,
+        amount: cartCheckout.pricing.total,
+      });
+
+      const { orderId, key, amount, currency } = paymentRes.data;
+
+      const options = {
+        key,
+        amount,
+        currency,
+        name: "Green Mart",
+        description: "Order Payment",
+        order_id: orderId,
+        handler: async function (response) {
+          try {
+            const verifyRes = await api.post("/payment/verify", {
+              ...response,
+              dbOrderId,
+            });
+
+            if (verifyRes.data.success) {
+              toast.success("Payment Successful 🎉");
+              router.push(`/orders/${dbOrderId}`);
+            } else {
+              toast.error("Payment verification failed");
+            }
+          } catch (err) {
+            console.error(err);
+            toast.error("Payment verification error");
+          }
+        },
+        theme: { color: "#16a34a" },
+      };
+
+      const razorpay = new window.Razorpay(options);
+      razorpay.open();
+    } catch (err) {
+      console.error(err.response?.data || err);
+      toast.error(err.response?.data?.message || "Checkout failed");
+    }
   };
 
   return (
@@ -84,10 +186,7 @@ const CheckOut = () => {
           </button>
         </div>
 
-        <form
-          onSubmit={handlePlaceOrder}
-          className="grid lg:grid-cols-[2fr,1fr] gap-6"
-        >
+        <form className="grid lg:grid-cols-[2fr,1fr] gap-6">
           {/* Left side: forms */}
           <div className="space-y-4">
             {/* Address card */}
@@ -96,16 +195,16 @@ const CheckOut = () => {
                 Delivery Address
               </h2>
               <div className="grid md:grid-cols-2 gap-4">
-                <div className="md:col-span-2">
+                <div>
                   <label className="block text-xs font-medium text-gray-600 mb-1">
                     Full name
                   </label>
                   <input
                     type="text"
                     required
-                    value={address.fullName}
+                    value={address.name}
                     onChange={(e) =>
-                      setAddress({ ...address, fullName: e.target.value })
+                      setAddress({ ...address, name: e.target.value })
                     }
                     className="w-full rounded-2xl border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
                     placeholder="John Doe"
@@ -141,19 +240,33 @@ const CheckOut = () => {
                     placeholder="Mumbai"
                   />
                 </div>
-                <div className="md:col-span-2">
+                <div>
                   <label className="block text-xs font-medium text-gray-600 mb-1">
-                    Address
+                    Street Address
                   </label>
                   <input
                     type="text"
                     required
-                    value={address.line1}
+                    value={address.street}
                     onChange={(e) =>
-                      setAddress({ ...address, line1: e.target.value })
+                      setAddress({ ...address, street: e.target.value })
                     }
                     className="w-full rounded-2xl border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
                     placeholder="House no, street, area"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">
+                    State
+                  </label>
+                  <input
+                    type="text"
+                    value={address.state}
+                    onChange={(e) =>
+                      setAddress({ ...address, state: e.target.value })
+                    }
+                    placeholder="Haryana"
+                    className="w-full rounded-2xl border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
                   />
                 </div>
                 <div>
@@ -163,9 +276,9 @@ const CheckOut = () => {
                   <input
                     type="text"
                     required
-                    value={address.zip}
+                    value={address.pincode}
                     onChange={(e) =>
-                      setAddress({ ...address, zip: e.target.value })
+                      setAddress({ ...address, pincode: e.target.value })
                     }
                     className="w-full rounded-2xl border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
                     placeholder="400001"
@@ -263,30 +376,30 @@ const CheckOut = () => {
             </h2>
 
             <div className="space-y-2 mb-4 max-h-56 overflow-y-auto pr-1">
-              {cart.map((item) => (
+              {cartCheckout.items.map((item) => (
                 <div
-                  key={item.id}
+                  key={item.productId}
                   className="flex items-center justify-between text-sm"
                 >
                   <div className="flex items-center gap-2">
                     <div className="w-10 h-10 rounded-2xl overflow-hidden bg-gray-100 shrink-0">
                       <img
                         src={item.image}
-                        alt={item.name}
+                        alt={item.title}
                         className="w-full h-full object-cover"
                       />
                     </div>
                     <div>
                       <p className="text-gray-800 text-xs font-medium">
-                        {item.name}
+                        {item.title}
                       </p>
                       <p className="text-[11px] text-gray-400">
-                        {item.weight} × {item.quantity}
+                        {item.discountPrice} × {item.quantity}
                       </p>
                     </div>
                   </div>
                   <p className="text-xs font-semibold text-gray-900">
-                    ${(item.price * item.quantity).toFixed(2)}
+                    ${(item.discountPrice * item.quantity).toFixed(2)}
                   </p>
                 </div>
               ))}
@@ -296,38 +409,31 @@ const CheckOut = () => {
               <div className="flex justify-between">
                 <span className="text-gray-500">Items total</span>
                 <span className="font-medium text-gray-900">
-                  ${totals.subtotal.toFixed(2)}
+                  ${cartCheckout.pricing.subtotal.toFixed(2)}
                 </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-500">Discount</span>
                 <span className="font-medium text-green-600">
-                  -${totals.discount.toFixed(2)}
+                  ${cartCheckout.pricing.discount.toFixed(2)}
                 </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-500">Delivery</span>
                 <span className="font-medium text-gray-900">
-                  {totals.deliveryFee === 0
-                    ? "Free"
-                    : `$${totals.deliveryFee.toFixed(2)}`}
+                  {cartCheckout.pricing.shipping}
                 </span>
               </div>
 
               <div className="border-t border-gray-100 pt-3 mt-2 flex justify-between items-center">
                 <span className="font-semibold text-gray-900">Grand Total</span>
-                <div className="text-right">
-                  <p className="text-lg font-semibold text-gray-900">
-                    ${totals.total.toFixed(2)}
-                  </p>
-                  <p className="text-xs text-gray-400 line-through">
-                    ${totals.oldSubtotal.toFixed(2)}
-                  </p>
-                </div>
+                <p className="text-lg font-semibold text-gray-900">
+                  ${cartCheckout.pricing.total.toFixed(2)}
+                </p>
               </div>
-
               <button
-                type="submit"
+                type="button"
+                onClick={handleCheckout}
                 className="mt-4 w-full bg-green-600 hover:bg-green-700 text-white text-sm font-semibold py-3 rounded-full transition"
               >
                 Place Order
