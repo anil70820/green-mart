@@ -166,7 +166,7 @@ const UsersTable = () => {
             </TableRow>
           </TableHead>
 
-          <tbody className="divide-y divide-[#e5e7eb]">
+          <tbody className="divide-y divide-[#e5e7eb] h-20">
             {loading && (
               <tr>
                 <td colSpan={6} className="text-center py-8">

@@ -172,7 +172,7 @@ const OrderDetails = () => {
             <p className="text-sm text-gray-500">Order ID: {order.id}</p>
           </div>
           <button
-            onClick={() => router.push("/orders")}
+            onClick={() => router.push("/my-orders")}
             className="rounded-full bg-white border border-gray-200 text-gray-700 px-6 py-2 text-sm font-medium hover:border-green-600 hover:text-green-600 transition"
           >
             Back to Orders

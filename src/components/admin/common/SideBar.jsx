@@ -135,7 +135,7 @@ const SideBar = ({ open, setOpen }) => {
           <div className="px-4 border-t border-t-gray-100 py-5">
             <button
               onClick={logOutUser}
-              className="w-full flex items-center justify-center gap-3 py-4 rounded-xl bg-[#D62D20] text-white font-bold text-sm tracking-wide shadow-lg shadow-[#D62D20]/20 hover:brightness-110 active:scale-[0.98] transition-all"
+              className="w-full flex items-center justify-center gap-3 py-3 rounded-xl bg-[#D62D20] text-white font-bold text-sm tracking-wide shadow-lg shadow-[#D62D20]/20 hover:brightness-110 active:scale-[0.98] transition-all"
             >
               <span className="material-symbols-outlined text-[20px]">
                 logout
